@@ -41,7 +41,9 @@ public class Game
 
         //map.print();
 
-        for (int i = 0; i < 200; i++)
+        int roundLimit = 200;
+
+        for (int i = 0; i < roundLimit; i++)
         {
             robotPlayers = map.getRobotPlayers();
 
@@ -56,50 +58,63 @@ public class Game
                 break;
             }
 
-            if (i < 50)
+            if (i % 50 == 0)
             {
 //                map.print();
             }
 
-            if (i == 199)
+            if (i == (roundLimit - 1))
             {
-                for (int j = 0; j < robotPlayers.length; j++)
-                {
-//                    System.out.println("Remaining player");
-                    if (robotPlayers[j].getRc().getTeam() == Team.A)
-                    {
-                        map.countRedRobot(robotPlayers[j]);
-                    }
-                    else
-                    {
-                        map.countBlueRobot(robotPlayers[j]);
-                    }
-                }
-
                 break;
             }
-
-//            map.print();
         }
 
-        println("Total Red Damage Dealt: " + map.getRedSoldierDamageDealt());
-        println("Total End Red Health: " + map.getRedSoldierTotalHealth());
-        println("Total Blue Damage Dealt: " + map.getBlueSoldierDamageDealt());
-        println("Total End Blue Health: " + map.getBlueSoldierTotalHealth());
+        if (verbose)
+        {
+            map.printRedDamage();
+            map.printRedHealth();
+            map.printBlueDamage();
+            map.printBlueHealth();
+        }
+
 //        map.print();
     }
 
     public double[] getTeamResults(int team)
     {
-        double[] results = new double[1];
+        double[] results = new double[7];
 
+        double[] redDamageDealt = map.getRedDamageDealt();
+        double[] redTotalHealth = map.getRedTotalHealth();
+        double[] blueDamageDealt = map.getBlueDamageDealt();
+        double[] blueTotalHealth = map.getBlueTotalHealth();
+
+        // 0 -> Soldier
+        // 1 -> Archon
+        // 2 -> Guard
+        // 3 -> Scout
+        // 4 -> Turret
+        // 5 -> TTM
+        // 6 -> Viper
         if (team == 0)
         {
-            results[0] = map.getRedSoldierDamageDealt() + 3 * map.getRedSoldierTotalHealth();
+            results[0] = redDamageDealt[0] + 3 * redTotalHealth[0];
+            results[1] = redTotalHealth[5];
+            results[2] = 2 * redDamageDealt[1] + redTotalHealth[1];
+            results[3] = redTotalHealth[4];
+            results[4] = 3 * redDamageDealt[2] + redTotalHealth[2];
+            results[5] = redTotalHealth[6];
+            results[6] = 2 * redDamageDealt[3] + redTotalHealth[3];
         }
         else
         {
-            results[0] = map.getBlueSoldierDamageDealt() + 3 * map.getBlueSoldierTotalHealth();
+            results[0] = blueDamageDealt[0] + 3 * blueTotalHealth[0];
+            results[1] = blueTotalHealth[5];
+            results[2] = 2 * blueDamageDealt[1] + blueTotalHealth[1];
+            results[3] = blueTotalHealth[4];
+            results[4] = 3 * blueDamageDealt[2] + blueTotalHealth[2];
+            results[5] = redTotalHealth[6];
+            results[6] = 2 * blueDamageDealt[3] + blueTotalHealth[3];
         }
 
         return results;

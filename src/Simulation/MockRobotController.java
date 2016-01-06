@@ -23,14 +23,7 @@ public class MockRobotController implements RobotController
         this.location = location;
         this.map = map;
 
-        if (robotType == RobotType.SOLDIER)
-        {
-            this.health = RobotType.SOLDIER.maxHealth;
-        }
-        else
-        {
-            throw new Error("Robot Type does not get health assigned: " + robotType);
-        }
+        this.health = robotType.maxHealth;
 
         this.missileCount = 0;
         this.xp = 0;
@@ -70,7 +63,7 @@ public class MockRobotController implements RobotController
         if (loc.distanceSquaredTo(getLocation()) <= getType().attackRadiusSquared)
         {
             totalDamageDealt += getType().attackPower;
-            map.attackLocation(loc, getType().attackPower);
+            map.attackLocation(loc, getType().attackPower, getLocation());
 //            System.out.println("Robot on Team: " + getTeam() + " had dealt: " + getType().attackPower + " damage");
         }
     }

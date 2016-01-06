@@ -1,9 +1,12 @@
 package Simulation.Teams;
 
-/**
- * Created by fred on 1/5/16.
- */
-public class Scout
+import battlecode.common.RobotController;
+
+public class Scout extends Unit
 {
-    
+    public Scout(RobotController rc, double[][] weights)
+    {
+        super(rc, weights);
+        net.setWeights(weights[3]);
+    }
 }

@@ -3,9 +3,7 @@ package Simulation.Teams;
 import Simulation.ActivationFunction;
 import Simulation.FeedForwardNeuralNetwork;
 import Simulation.MockRobotPlayer;
-import battlecode.common.RobotController;
-import battlecode.common.RobotInfo;
-import battlecode.common.Team;
+import battlecode.common.*;
 
 public abstract class Unit extends MockRobotPlayer
 {
@@ -29,14 +27,14 @@ public abstract class Unit extends MockRobotPlayer
         RobotInfo[] nearByAllies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, rc.getTeam());
         RobotInfo[] allies = rc.senseNearbyRobots(rc.getType().sensorRadiusSquared, rc.getTeam());
 
-        RobotInfo[] nearByZombies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, Team.ZOMBIE);
-        RobotInfo[] zombies = rc.senseNearbyRobots(rc.getType().sensorRadiusSquared, Team.ZOMBIE);
+//        RobotInfo[] nearByZombies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, Team.ZOMBIE);
+//        RobotInfo[] zombies = rc.senseNearbyRobots(rc.getType().sensorRadiusSquared, Team.ZOMBIE);
 
 
         try
         {
             if (this.fightMicro.runFightMicro(enemies, nearByAllies, allies, target, nearByEnemies, net));
-            else if (this.fightMicro.runFightMicro(zombies, nearByAllies, allies, target, nearByZombies, net));
+//            else if (this.fightMicro.runFightMicro(zombies, nearByAllies, allies, target, nearByZombies, net));
             else if (rc.isCoreReady()) navigator.move(target);
 
         }

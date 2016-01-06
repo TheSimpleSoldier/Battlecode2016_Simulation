@@ -1,7 +1,12 @@
 package Simulation.Teams;
 
-/**
- * Created by fred on 1/5/16.
- */
-public class Gaurd {
+import battlecode.common.RobotController;
+
+public class Gaurd extends Unit
+{
+    public Gaurd(RobotController rc, double[][] weights)
+    {
+        super(rc, weights);
+        net.setWeights(weights[2]);
+    }
 }

@@ -1,7 +1,6 @@
 package Simulation;
 
-import Simulation.Teams.Soldier;
-import Simulation.Teams.team044;
+import Simulation.Teams.*;
 import battlecode.common.*;
 import java.io.*;
 
@@ -16,10 +15,27 @@ public class Map
 
     private double blueSoldierDamageDealt;
     private double blueSoldierTotalHealth;
+    private double blueGaurdDamageDealt;
+    private double blueGaurdTotalHealth;
+    private double blueTurretDamageDealt;
+    private double blueTurretTotalHealth;
+    private double blueViperDamageDealt;
+    private double blueViperTotalHealth;
+    private double blueTTMTotalHealth;
+    private double blueScoutTotalHealth;
+    private double blueArchonTotalHealth;
 
     private double redSoldierDamageDealt;
     private double redSoldierTotalHealth;
-
+    private double redGaurdDamageDealt;
+    private double redGaurdTotalHealth;
+    private double redTurretDamageDealt;
+    private double redTurretTotalHealth;
+    private double redViperDamageDealt;
+    private double redViperTotalHealth;
+    private double redTTMTotalHealth;
+    private double redScoutTotalHealth;
+    private double redArchonTotalHealth;
 
     public Map(double[][] weights1, double[][] weights2, boolean verbose)
     {
@@ -30,6 +46,25 @@ public class Map
         this.blueSoldierTotalHealth = 0;
         this.redSoldierDamageDealt = 0;
         this.redSoldierTotalHealth = 0;
+        this.blueGaurdDamageDealt = 0;
+        this.blueGaurdTotalHealth = 0;
+        this.redGaurdDamageDealt = 0;
+        this.redGaurdTotalHealth = 0;
+        this.blueTurretDamageDealt = 0;
+        this.blueTTMTotalHealth = 0;
+        this.blueViperDamageDealt = 0;
+        this.blueViperTotalHealth = 0;
+        this.blueTTMTotalHealth = 0;
+        this.blueScoutTotalHealth = 0;
+        this.blueArchonTotalHealth = 0;
+        this.redTurretDamageDealt = 0;
+        this.redTTMTotalHealth = 0;
+        this.redViperDamageDealt = 0;
+        this.redViperTotalHealth = 0;
+        this.redTTMTotalHealth = 0;
+        this.redScoutTotalHealth = 0;
+        this.redArchonTotalHealth = 0;
+
         this.verbose = verbose;
     }
 
@@ -312,6 +347,72 @@ public class Map
                                     unitStrings[unit_x][unit_y] = "sb";
                                 }
                             }
+                            else if (x.contains("GUARD"))
+                            {
+                                if (isTeamA)
+                                {
+                                    unitStrings[unit_x][unit_y] = "ga";
+                                }
+                                else
+                                {
+                                    unitStrings[unit_x][unit_y] = "gb";
+                                }
+                            }
+                            else if (x.contains("VIPER"))
+                            {
+                                if (isTeamA)
+                                {
+                                    unitStrings[unit_x][unit_y] = "va";
+                                }
+                                else
+                                {
+                                    unitStrings[unit_x][unit_y] = "vb";
+                                }
+                            }
+                            else if (x.contains("TURRET"))
+                            {
+                                if (isTeamA)
+                                {
+                                    unitStrings[unit_x][unit_y] = "ta";
+                                }
+                                else
+                                {
+                                    unitStrings[unit_x][unit_y] = "tb";
+                                }
+                            }
+                            else if (x.contains("ARCHON"))
+                            {
+                                if (isTeamA)
+                                {
+                                    unitStrings[unit_x][unit_y] = "ra";
+                                }
+                                else
+                                {
+                                    unitStrings[unit_x][unit_y] = "rb";
+                                }
+                            }
+                            else if (x.contains("TTM"))
+                            {
+                                if (isTeamA)
+                                {
+                                    unitStrings[unit_x][unit_y] = "ma";
+                                }
+                                else
+                                {
+                                    unitStrings[unit_x][unit_y] = "mb";
+                                }
+                            }
+                            else if (x.contains("SCOUT"))
+                            {
+                                if (isTeamA)
+                                {
+                                    unitStrings[unit_x][unit_y] = "ca";
+                                }
+                                else
+                                {
+                                    unitStrings[unit_x][unit_y] = "cb";
+                                }
+                            }
                         }
                     }
                 }
@@ -359,6 +460,65 @@ public class Map
                 if (unitStrings[i][j].contains("s"))
                 {
                     robotType = RobotType.SOLDIER;
+
+                    if (team == Team.A)
+                        redSoldierTotalHealth += RobotType.SOLDIER.maxHealth;
+                    else
+                        blueSoldierTotalHealth += RobotType.SOLDIER.maxHealth;
+                }
+                else if (unitStrings[i][j].contains("r"))
+                {
+                    robotType = RobotType.ARCHON;
+
+                    if (team == Team.A)
+                        redArchonTotalHealth += RobotType.ARCHON.maxHealth;
+                    else
+                        blueArchonTotalHealth += RobotType.ARCHON.maxHealth;
+                }
+                else if (unitStrings[i][j].contains("t"))
+                {
+                    robotType = RobotType.TURRET;
+
+                    if (team == Team.A)
+                        redTurretTotalHealth += RobotType.TURRET.maxHealth;
+                    else
+                        blueTurretTotalHealth += RobotType.TURRET.maxHealth;
+                }
+                else if (unitStrings[i][j].contains("m"))
+                {
+                    robotType = RobotType.TTM;
+
+                    if (team == Team.A)
+                        redTTMTotalHealth += RobotType.TTM.maxHealth;
+                    else
+                        blueTTMTotalHealth += RobotType.TTM.maxHealth;
+                }
+                else if (unitStrings[i][j].contains("c"))
+                {
+                    robotType = RobotType.SCOUT;
+
+                    if (team == Team.A)
+                        redScoutTotalHealth += RobotType.SCOUT.maxHealth;
+                    else
+                        blueScoutTotalHealth += RobotType.SCOUT.maxHealth;
+                }
+                else if (unitStrings[i][j].contains("g"))
+                {
+                    robotType = RobotType.GUARD;
+
+                    if (team == Team.A)
+                        redGaurdTotalHealth += RobotType.GUARD.maxHealth;
+                    else
+                        blueGaurdTotalHealth += RobotType.GUARD.maxHealth;
+                }
+                else if (unitStrings[i][j].contains("v"))
+                {
+                    robotType = RobotType.VIPER;
+
+                    if (team == Team.A)
+                        redViperTotalHealth += RobotType.VIPER.maxHealth;
+                    else
+                        blueViperTotalHealth += RobotType.VIPER.maxHealth;
                 }
 
                 if (team != null && robotType != null)
@@ -380,6 +540,30 @@ public class Map
                             {
                                 robotPlayer = new Soldier(robotController, weights1);
                             }
+                            else if (robotType == RobotType.ARCHON)
+                            {
+                                robotPlayer = new Archon(robotController, weights1);
+                            }
+                            else if (robotType == RobotType.SCOUT)
+                            {
+                                robotPlayer = new Scout(robotController, weights1);
+                            }
+                            else if (robotType == RobotType.GUARD)
+                            {
+                                robotPlayer = new Gaurd(robotController, weights1);
+                            }
+                            else if (robotType == RobotType.VIPER)
+                            {
+                                robotPlayer = new Viper(robotController, weights1);
+                            }
+                            else if (robotType == RobotType.TURRET)
+                            {
+                                robotPlayer = new Turret(robotController, weights1);
+                            }
+                            else if (robotType == RobotType.TTM)
+                            {
+                                robotPlayer = new TTM(robotController, weights1);
+                            }
                             else
                             {
                                 robotPlayer = new Soldier(robotController, weights1);
@@ -394,7 +578,39 @@ public class Map
                         }
                         else
                         {
-                            robotPlayer = new Soldier(robotController, weights2);
+                            if (RobotType.SOLDIER == robotType)
+                            {
+                                robotPlayer = new Soldier(robotController, weights2);
+                            }
+                            else if (robotType == RobotType.ARCHON)
+                            {
+                                robotPlayer = new Archon(robotController, weights2);
+                            }
+                            else if (robotType == RobotType.SCOUT)
+                            {
+                                robotPlayer = new Scout(robotController, weights2);
+                            }
+                            else if (robotType == RobotType.GUARD)
+                            {
+                                robotPlayer = new Gaurd(robotController, weights2);
+                            }
+                            else if (robotType == RobotType.VIPER)
+                            {
+                                robotPlayer = new Viper(robotController, weights2);
+                            }
+                            else if (robotType == RobotType.TURRET)
+                            {
+                                robotPlayer = new Turret(robotController, weights2);
+                            }
+                            else if (robotType == RobotType.TTM)
+                            {
+                                robotPlayer = new TTM(robotController, weights2);
+                            }
+                            else
+                            {
+                                robotPlayer = new Soldier(robotController, weights2);
+                            }
+
                         }
                     }
 
@@ -543,32 +759,6 @@ public class Map
         {
             mapLayout[newLoc.x][newLoc.y].setRobotPlayer(robotPlayer);
         }
-        else
-        {
-            // record stats for bot
-            if (robotPlayer.getRc().getTeam() == Team.A)
-            {
-                this.redSoldierTotalHealth += robotPlayer.getHealth();
-//                this.redSoldierDamageDealt += ((MockRobotController) robotPlayer.getRc()).getTotalDamageDealt();
-            }
-            else
-            {
-                this.blueSoldierTotalHealth += robotPlayer.getHealth();
-//                this.blueSoldierDamageDealt += ((MockRobotController) robotPlayer.getRc()).getTotalDamageDealt();
-            }
-
-//            System.out.println("Player removed from game");
-        }
-    }
-
-    public void countRedRobot(MockRobotPlayer robotPlayer)
-    {
-        this.redSoldierTotalHealth += robotPlayer.getHealth();
-    }
-
-    public void countBlueRobot(MockRobotPlayer robotPlayer)
-    {
-        this.blueSoldierTotalHealth += robotPlayer.getHealth();
     }
 
 
@@ -581,9 +771,10 @@ public class Map
         return teamBHQ;
     }
 
-    public void attackLocation(MapLocation loc, double attackAmount)
+    public void attackLocation(MapLocation loc, double attackAmount, MapLocation attackFrom)
     {
         MockRobotPlayer player = mapLayout[loc.x][loc.y].getRobotPlayer();
+        MockRobotPlayer attacker = mapLayout[loc.x][loc.y].getRobotPlayer();
 
         if (player != null)
         {
@@ -596,35 +787,178 @@ public class Map
                 mapLayout[loc.x][loc.y].removeRobotPlayer();
             }
 
+            if (verbose)
+            {
+//                System.out.println("Under Attack!!");
+            }
+
             if (player.getRc().getTeam() == Team.A)
             {
-                this.blueSoldierDamageDealt += damageAmount;
+                if (player.getRc().getType() == RobotType.SOLDIER)
+                {
+                    this.redSoldierTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.GUARD)
+                {
+                    this.redGaurdTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.TURRET)
+                {
+                    this.redTurretTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.TTM)
+                {
+                    this.redTTMTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.SCOUT)
+                {
+                    this.redScoutTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.VIPER)
+                {
+                    this.redViperTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.ARCHON)
+                {
+                    this.redArchonTotalHealth -= damageAmount;
+                }
+
+                if (attacker.getRc().getType() == RobotType.SOLDIER)
+                {
+                    this.blueSoldierDamageDealt += damageAmount;
+                }
+                else if (attacker.getRc().getType() == RobotType.GUARD)
+                {
+                    this.blueGaurdDamageDealt += damageAmount;
+                }
+                else if (attacker.getRc().getType() == RobotType.TURRET)
+                {
+                    this.blueTurretDamageDealt += damageAmount;
+                }
+                else if (attacker.getRc().getType() == RobotType.VIPER)
+                {
+                    this.blueViperDamageDealt += damageAmount;
+                }
             }
             else
             {
-                this.redSoldierDamageDealt += damageAmount;
+                if (player.getRc().getType() == RobotType.SOLDIER)
+                {
+                    this.blueSoldierTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.GUARD)
+                {
+                    this.blueGaurdTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.TURRET)
+                {
+                    this.blueTurretTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.TTM)
+                {
+                    this.blueTTMTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.SCOUT)
+                {
+                    this.blueScoutTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.VIPER)
+                {
+                    this.blueViperTotalHealth -= damageAmount;
+                }
+                else if (player.getRc().getType() == RobotType.ARCHON)
+                {
+                    this.blueArchonTotalHealth -= damageAmount;
+                }
+
+                if (attacker.getRc().getType() == RobotType.SOLDIER)
+                {
+                    this.redSoldierDamageDealt += damageAmount;
+                }
+                else if (attacker.getRc().getType() == RobotType.GUARD)
+                {
+                    this.redGaurdDamageDealt += damageAmount;
+                }
+                else if (attacker.getRc().getType() == RobotType.TURRET)
+                {
+                    this.redTurretDamageDealt += damageAmount;
+                }
+                else if (attacker.getRc().getType() == RobotType.VIPER)
+                {
+                    this.redViperDamageDealt += damageAmount;
+                }
             }
 
         }
     }
 
-    public double getBlueSoldierDamageDealt()
+    public double[] getBlueDamageDealt()
     {
-        return this.blueSoldierDamageDealt;
+        return new double[] {
+                this.blueSoldierDamageDealt, this.blueGaurdDamageDealt, this.blueTurretDamageDealt, this.blueViperDamageDealt
+        };
     }
 
-    public double getBlueSoldierTotalHealth()
+    public double[] getBlueTotalHealth()
     {
-        return this.blueSoldierTotalHealth;
+        return new double[] {
+            this.blueSoldierTotalHealth, this.blueGaurdTotalHealth, this.blueTurretTotalHealth, this.blueViperTotalHealth, this.blueScoutTotalHealth, this.blueArchonTotalHealth, this.blueTTMTotalHealth
+        };
     }
 
-    public double getRedSoldierDamageDealt()
+    public double[] getRedDamageDealt()
     {
-        return this.redSoldierDamageDealt;
+        return new double[] {
+                this.redSoldierDamageDealt, this.redGaurdDamageDealt, this.redTurretDamageDealt, this.redViperDamageDealt
+        };
     }
 
-    public double getRedSoldierTotalHealth()
+    public double[] getRedTotalHealth()
     {
-        return this.redSoldierTotalHealth;
+        return new double[] {
+                this.redSoldierTotalHealth, this.redGaurdTotalHealth, this.redTurretTotalHealth, this.redViperTotalHealth, this.redScoutTotalHealth, this.redArchonTotalHealth, this.redTTMTotalHealth
+        };
+    }
+
+    public void printRedDamage()
+    {
+        System.out.print("Red Soldier Damage: " + this.redSoldierDamageDealt);
+        System.out.print(" Red Guard Damage: " + this.redGaurdDamageDealt);
+        System.out.print(" Red Turret Damage: " + this.redTurretDamageDealt);
+        System.out.print(" Red Viper Damage: " + this.redViperDamageDealt);
+        System.out.println();
+    }
+
+    public void printRedHealth()
+    {
+        System.out.print("Red Soldier Health: " + this.redSoldierTotalHealth);
+        System.out.print(" Red Guard Health: " + this.redGaurdTotalHealth);
+        System.out.print(" Red Turret Health: " + this.redTurretTotalHealth);
+        System.out.print(" Red Viper Health: " + this.redViperTotalHealth);
+        System.out.print(" Red Scout Health: " + this.redScoutTotalHealth);
+        System.out.print(" Red Archon Health: " + this.redArchonTotalHealth);
+        System.out.print(" Red TTM Health: " + this.redTTMTotalHealth);
+        System.out.println();
+    }
+
+    public void printBlueDamage()
+    {
+        System.out.print("Blue Soldier Damage: " + this.blueSoldierDamageDealt);
+        System.out.print(" Blue Guard Damage: " + this.blueGaurdDamageDealt);
+        System.out.print(" Blue Turret Damage: " + this.blueTurretDamageDealt);
+        System.out.print(" Blue Viper Damage: " + this.blueViperDamageDealt);
+        System.out.println();
+    }
+
+    public void printBlueHealth()
+    {
+        System.out.print("blue Soldier Health: " + this.blueSoldierTotalHealth);
+        System.out.print(" blue Guard Health: " + this.blueGaurdTotalHealth);
+        System.out.print(" blue Turret Health: " + this.blueTurretTotalHealth);
+        System.out.print(" blue Viper Health: " + this.blueViperTotalHealth);
+        System.out.print(" blue Scout Health: " + this.blueScoutTotalHealth);
+        System.out.print(" blue Archon Health: " + this.blueArchonTotalHealth);
+        System.out.print(" blue TTM Health: " + this.blueTTMTotalHealth);
+        System.out.println();
     }
 }

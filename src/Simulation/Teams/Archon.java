@@ -1,7 +1,12 @@
 package Simulation.Teams;
 
-/**
- * Created by fred on 1/5/16.
- */
-public class Archon {
+import battlecode.common.RobotController;
+
+public class Archon extends Unit
+{
+    public Archon(RobotController rc, double[][] weights)
+    {
+        super(rc, weights);
+        net.setWeights(weights[1]);
+    }
 }
