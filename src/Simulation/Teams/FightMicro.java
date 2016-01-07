@@ -71,26 +71,58 @@ public class FightMicro
         }
 
         double alliedHealth = 0;
+        double enemyHealth = 0;
+        double offensiveEnemies = 0;
+        double enemiesInRangeOfUs = 0;
+        int enemy_x = 0;
+        int enemy_y = 0;
+        int ally_x = 0;
+        int ally_y = 0;
+
+        for (int i = 0; i < enemies.length; i++)
+        {
+            enemy_x += enemies[i].location.x;
+            enemy_y += enemies[i].location.y;
+            switch(enemies[i].type)
+            {
+                case VIPER:
+                case SOLDIER:
+                case GUARD:
+                case BIGZOMBIE:
+                case FASTZOMBIE:
+                case STANDARDZOMBIE:
+                case RANGEDZOMBIE:
+                case TURRET:
+                    offensiveEnemies++;
+                    enemyHealth += enemies[i].health;
+                    if (rc.getLocation().distanceSquaredTo(enemies[i].location) <= enemies[i].type.attackRadiusSquared)
+                        enemiesInRangeOfUs++;
+            }
+        }
+
+        enemy_x /= enemies.length;
+        enemy_y /= enemies.length;
 
         for (int i = allies.length; --i >= 0; )
         {
             alliedHealth += allies[i].health;
+            ally_x += allies[i].location.x;
+            ally_y += allies[i].location.y;
         }
 
-        double enemyHealth = 0;
-
-        for (int i = enemies.length; --i >= 0; )
+        if (allies.length > 0)
         {
-            enemyHealth += enemies[i].health;
+            ally_x /= allies.length;
+            ally_y /= allies.length;
         }
 
         double[] inputs = new double[] {
-                enemies.length / 10,
+                offensiveEnemies / 10,
                 allies.length / 10,
                 alliedHealth / 10,
                 enemyHealth / 10,
                 nearByEnemies.length / 10,
-                nearByAllies.length / 10
+                enemiesInRangeOfUs / 10
         };
 
         Direction dir;
@@ -124,13 +156,13 @@ public class FightMicro
 
         if (rc.isCoreReady()) {
             if (retreat) {
-                MapLocation enemy = new MapLocation((int) inputs[0] + rc.getLocation().x, (int) inputs[1] + rc.getLocation().y);
+                MapLocation enemy = new MapLocation(enemy_x, enemy_y);
                 dir = rc.getLocation().directionTo(enemy).opposite();
                 moveDir(dir);
             }
 
             if (rc.isCoreReady() && cluster) {
-                MapLocation ally = new MapLocation((int) inputs[2] + rc.getLocation().x, (int) inputs[3] + rc.getLocation().y);
+                MapLocation ally = new MapLocation(ally_x, ally_y);
                 dir = rc.getLocation().directionTo(ally);
                 moveDir(dir);
             }
@@ -141,7 +173,7 @@ public class FightMicro
             }
 
             if (rc.isCoreReady() && pursue) {
-                MapLocation enemy = new MapLocation((int) inputs[0] + rc.getLocation().x, (int) inputs[1] + rc.getLocation().y);
+                MapLocation enemy = new MapLocation(enemy_x, enemy_y);
                 dir = rc.getLocation().directionTo(enemy);
                 moveDir(dir);
             }

@@ -4,6 +4,9 @@ import java.io.*;
 
 public class Main
 {
+    static boolean zombie = true;
+    static boolean soldier = false;
+
     /**
      * This is the main function which triggers simulations
      * @param args
@@ -48,7 +51,7 @@ public class Main
                 }
         };
 
-//        runFightSimulation(gaWeights, gaWeights, 0, 0, true, 1);
+        runFightSimulation(gaWeights, gaWeights, 0, 0, true, 1);
 
         //runFightSimulation(inputs, inputs);
 
@@ -65,7 +68,7 @@ public class Main
 //        double[][] idealWeights = gaWeights; // ga.runGA(10, 1, mutationRate, crossOverRate, mutationAmount); //getIdealWeights(10, 1, mutationRate, crossOverRate, mutationAmount);
 //
         PSO pso = new PSO(globalScale, localScale, randomScale);
-        double[][] idealWeights2 = pso.getBestWeights(200, 10);
+        double[][] idealWeights2 = pso.getBestWeights(100, 10);
 
         System.out.println("PSO Weights:");
 
@@ -77,6 +80,8 @@ public class Main
             }
             System.out.println();
         }
+
+        runFightSimulation(idealWeights2, idealWeights2, 0, 0, true, 1);
 //
 //        System.out.println("GA: ");
 //        for (int i = 0; i < idealWeights.length; i++)
@@ -106,7 +111,7 @@ public class Main
 //            runFightSimulation(idealWeights2, idealWeights2, 1, 0, verbose, 1);
 //        }
 //
-//        System.out.println("Run Time: " + (System.currentTimeMillis() - startTime));
+        System.out.println("Run Time: " + (System.currentTimeMillis() - startTime));
     }
 
     /**
@@ -146,19 +151,29 @@ public class Main
         // Battlecode2016_Simulation/src/Simulation
         String map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierTest1.xml";
 
-
-//        if (round % 4 == 1)
-//        {
-            map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGaurd1.xml";
-//        }
-//        else if (round % 4 == 2)
-//        {
-//            map = "FightMicroGA/Simulation/simulationMaps/frontlines.xml";
-//        }
-//        else if (round % 4 == 3)
-//        {
-//            map = "FightMicroGA/Simulation/simulationMaps/noeffort.xml";
-//        }
+        if (soldier)
+        {
+            if (round % 4 == 0)
+            {
+                map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierTest1.xml";
+            }
+            else if (round % 4 == 1)
+            {
+                map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGaurd1.xml";
+            }
+            else if (round % 4 == 2)
+            {
+                map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierTest2.xml";
+            }
+            else if (round % 4 == 3)
+            {
+                map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTest1.xml";
+            }
+        }
+        else if (zombie)
+        {
+            map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGuardZombie.xml";
+        }
 
         game.runMatch(map, teamA, teamB);
 

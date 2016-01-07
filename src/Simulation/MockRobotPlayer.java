@@ -60,16 +60,30 @@ public abstract class MockRobotPlayer
         {
             return 'm';
         }
+        else if (rc.getType() == RobotType.RANGEDZOMBIE)
+        {
+            return 'r';
+        }
+        else if (rc.getType() == RobotType.BIGZOMBIE)
+        {
+            return 'b';
+        }
+        else if (rc.getType() == RobotType.STANDARDZOMBIE)
+        {
+            return 's';
+        }
+        else if (rc.getType() == RobotType.FASTZOMBIE)
+        {
+            return 'f';
+        }
 
         return ' ';
     }
 
     public char getTeamChar()
     {
-        if (rc.getTeam() == Team.A)
-        {
-            return 'a';
-        }
+        if (rc.getTeam() == Team.A) return 'a';
+        else if (rc.getTeam() == Team.ZOMBIE) return 'z';
         return 'b';
     }
 

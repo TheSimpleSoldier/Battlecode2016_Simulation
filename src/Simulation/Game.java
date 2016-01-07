@@ -46,19 +46,25 @@ public class Game
         for (int i = 0; i < roundLimit; i++)
         {
             robotPlayers = map.getRobotPlayers();
+            boolean allZombies = true;
 
             for (int j = 0; j < robotPlayers.length; j++)
             {
                 robotPlayers[j].run();
                 robotPlayers[j].runTurnEnd();
+
+                if (allZombies && robotPlayers[j].getRc().getTeam() != Team.ZOMBIE)
+                {
+                    allZombies = false;
+                }
             }
 
-            if (robotPlayers.length == 0)
+            if (robotPlayers.length == 0 || allZombies)
             {
                 break;
             }
 
-            if (i % 50 == 0)
+            if (i % 5 == 0)
             {
 //                map.print();
             }
@@ -75,6 +81,7 @@ public class Game
             map.printRedHealth();
             map.printBlueDamage();
             map.printBlueHealth();
+            map.printZombie();
         }
 
 //        map.print();
@@ -88,6 +95,8 @@ public class Game
         double[] redTotalHealth = map.getRedTotalHealth();
         double[] blueDamageDealt = map.getBlueDamageDealt();
         double[] blueTotalHealth = map.getBlueTotalHealth();
+        double[] redInfectedAmount = map.getRedInfectedAmount();
+        double[] blueInfectedAmount = map.getBlueInfectedAmount();
 
         // 0 -> Soldier
         // 1 -> Archon
@@ -98,23 +107,23 @@ public class Game
         // 6 -> Viper
         if (team == 0)
         {
-            results[0] = redDamageDealt[0] + 3 * redTotalHealth[0];
+            results[0] = redDamageDealt[0] + 3 * redTotalHealth[0] - 2 * redInfectedAmount[0];
             results[1] = redTotalHealth[5];
-            results[2] = 2 * redDamageDealt[1] + redTotalHealth[1];
+            results[2] = 2 * redDamageDealt[1] + redTotalHealth[1] - 2 * redInfectedAmount[1];
             results[3] = redTotalHealth[4];
             results[4] = 3 * redDamageDealt[2] + redTotalHealth[2];
             results[5] = redTotalHealth[6];
-            results[6] = 2 * redDamageDealt[3] + redTotalHealth[3];
+            results[6] = 2 * redDamageDealt[3] + redTotalHealth[3] - 2 * redInfectedAmount[2];
         }
         else
         {
-            results[0] = blueDamageDealt[0] + 3 * blueTotalHealth[0];
+            results[0] = blueDamageDealt[0] + 3 * blueTotalHealth[0] - 2 * blueInfectedAmount[0];
             results[1] = blueTotalHealth[5];
-            results[2] = 2 * blueDamageDealt[1] + blueTotalHealth[1];
+            results[2] = 2 * blueDamageDealt[1] + blueTotalHealth[1] - 2 * blueInfectedAmount[1];
             results[3] = blueTotalHealth[4];
             results[4] = 3 * blueDamageDealt[2] + blueTotalHealth[2];
             results[5] = redTotalHealth[6];
-            results[6] = 2 * blueDamageDealt[3] + blueTotalHealth[3];
+            results[6] = 2 * blueDamageDealt[3] + blueTotalHealth[3] - 2 * blueInfectedAmount[2];
         }
 
         return results;

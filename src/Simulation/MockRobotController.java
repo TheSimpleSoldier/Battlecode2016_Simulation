@@ -11,10 +11,9 @@ public class MockRobotController implements RobotController
     private double coreDelay;
     private double weaponsDelay;
     private double health;
-    private double supply;
-    private int xp;
-    private int missileCount;
     private double totalDamageDealt;
+    private int viperInfection;
+    private int zombieInfection;
 
     public MockRobotController(Team team, RobotType robotType, MapLocation location, Map map)
     {
@@ -25,12 +24,11 @@ public class MockRobotController implements RobotController
 
         this.health = robotType.maxHealth;
 
-        this.missileCount = 0;
-        this.xp = 0;
         this.coreDelay = 0;
         this.weaponsDelay = 0;
-        this.supply = 0;
         this.totalDamageDealt = 0;
+        this.viperInfection = 0;
+        this.zombieInfection = 0;
     }
 
     /**
@@ -155,6 +153,17 @@ public class MockRobotController implements RobotController
     }
 
     /**
+     * Determine if our robot can sense a location.
+     *
+     * @param loc
+     * @return
+     */
+    public boolean canSense(MapLocation loc)
+    {
+        throw new Error("can sense not implemented");
+    }
+
+    /**
      * Returns true if the given location is within the robot's sensor range, or within the sensor range of some ally.
      *
      * @param loc
@@ -183,7 +192,9 @@ public class MockRobotController implements RobotController
      */
     public void clearRubble(Direction dir)
     {
-        throw new Error("Clear Rubble not implemented");
+        double rubble = senseRubble(getLocation().add(dir));
+        double removeAmount = rubble * 0.05 + 10;
+        map.clearRubble(removeAmount, getLocation().add(dir));
     }
 
     /**
@@ -240,6 +251,18 @@ public class MockRobotController implements RobotController
     public int getID()
     {
         throw new Error("getID Not implemented");
+    }
+
+    /**
+     * Gets the number of turns the robot will remain infected.
+     *
+     * @return
+     */
+    public int getInfectedTurns()
+    {
+        if (this.zombieInfection > this.viperInfection)
+            return this.zombieInfection;
+        return this.viperInfection;
     }
 
     /**
@@ -313,6 +336,16 @@ public class MockRobotController implements RobotController
     }
 
     /**
+     * Gets the number of turns the robot will remain infected from a viper's attack.
+     *
+     * @return
+     */
+    public int getViperInfectedTurns()
+    {
+        return this.viperInfection;
+    }
+
+    /**
      * Returns the amount of weapon delay a robot has accumulated.
      *
      * @return
@@ -320,6 +353,16 @@ public class MockRobotController implements RobotController
     public double getWeaponDelay()
     {
         return this.weaponsDelay;
+    }
+
+    /**
+     * Gets the number of turns the robot will remain infected from a zombie's attack.
+     *
+     * @return
+     */
+    public int getZombieInfectedTurns()
+    {
+        return this.zombieInfection;
     }
 
     /**
@@ -351,6 +394,18 @@ public class MockRobotController implements RobotController
     public boolean isCoreReady()
     {
         return this.coreDelay < 1;
+    }
+
+    /**
+     * Returns true if the robot is infected (either from a viper or a zombie).
+     *
+     * @return
+     */
+    public boolean isInfected()
+    {
+        if (this.zombieInfection > 0 || this.viperInfection > 0)
+            return true;
+        return false;
     }
 
     /**
@@ -456,6 +511,17 @@ public class MockRobotController implements RobotController
         throw new Error("resign Not implemented");
     }
 
+    /**
+     * Returns all hostile (zombie or enemy team) robots that can be sensed within a certain radius of a specified location.
+     *
+     * @param center
+     * @param radiusSquared
+     * @return
+     */
+    public RobotInfo[] senseHostileRobots(MapLocation center, int radiusSquared)
+    {
+        throw new Error("senseHostileRobots not implemented");
+    }
     /**
      * Returns all robots that can be sensed on the map.
      *
@@ -590,7 +656,7 @@ public class MockRobotController implements RobotController
      */
     public double senseRubble(MapLocation loc)
     {
-        throw new Error("senseRubble not implemented");
+        return map.getRubble(loc);
     }
 
     /**
@@ -685,6 +751,29 @@ public class MockRobotController implements RobotController
         {
             weaponsDelay = 0;
         }
+
+        if (this.viperInfection > 1)
+        {
+            this.viperInfection--;
+            this.health -= GameConstants.VIPER_INFECTION_DAMAGE;
+            if (health <= 0)
+            {
+                map.unitDiedToViper(getLocation(), getType());
+            }
+        }
+        else
+        {
+            this.viperInfection = 0;
+        }
+
+        if (this.zombieInfection > 1)
+        {
+            this.zombieInfection--;
+        }
+        else
+        {
+            this.zombieInfection = 0;
+        }
     }
 
 
@@ -705,5 +794,15 @@ public class MockRobotController implements RobotController
             return map.getTeamAHQ();
         }
         return map.getTeamBHQ();
+    }
+
+    public void infectedByZombie(int amount)
+    {
+        this.zombieInfection = amount;
+    }
+
+    public void infectedByViper(int amount)
+    {
+        this.viperInfection = amount;
     }
 }

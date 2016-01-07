@@ -15,28 +15,15 @@ public class team044 extends MockRobotPlayer {
     }
 
     public void run() {
-//        if (target == null) {
-//            target = rc.senseEnemyHQLocation();
-//        }
-//
-//        if (rc.getType() == RobotType.SOLDIER) {
-//            // run soldier code
-//            RobotInfo[] nearByEnemies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, rc.getTeam().opponent());
-//            RobotInfo[] allBots = rc.senseNearbyRobots(rc.getType().attackRadiusSquared);
-//
-//            //System.out.println(rc.isCoreReady());
-//            if (nearByEnemies.length == 0 && rc.isCoreReady()) {
-//                // move towards target
-//                move(target);
-//            } else if (nearByEnemies.length > 0) {
-//                // fight
-//                runFightMicro(nearByEnemies, target);
-//            } else {
-////                System.out.println("Waiting");
-//            }
-//        } else {
-//            // do nothing
-//        }
+        RobotInfo[] nearByEnemies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, rc.getTeam().opponent());
+
+        if (nearByEnemies.length == 0 && rc.isCoreReady()) {
+            // move towards target
+            move(target);
+        } else if (nearByEnemies.length > 0) {
+            // fight
+            runFightMicro(nearByEnemies, target);
+        }
     }
 
     /**

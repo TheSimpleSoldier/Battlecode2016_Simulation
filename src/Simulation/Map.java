@@ -37,6 +37,17 @@ public class Map
     private double redScoutTotalHealth;
     private double redArchonTotalHealth;
 
+    private double totalZombieDamage;
+    private double totalZombieHealth;
+
+    private double redSoldierInfectedAmount;
+    private double redGaurdInfectedAmount;
+    private double redViperInfectedAmount;
+
+    private double blueSoldierInfectedAmount;
+    private double blueGaurdInfectedAmount;
+    private double blueViperInfectedAmount;
+
     public Map(double[][] weights1, double[][] weights2, boolean verbose)
     {
         this.weights1 = weights1;
@@ -64,6 +75,15 @@ public class Map
         this.redTTMTotalHealth = 0;
         this.redScoutTotalHealth = 0;
         this.redArchonTotalHealth = 0;
+        this.totalZombieDamage = 0;
+        this.totalZombieHealth = 0;
+
+        this.redSoldierInfectedAmount = 0;
+        this.redGaurdInfectedAmount = 0;
+        this.redViperInfectedAmount = 0;
+        this.blueSoldierInfectedAmount = 0;
+        this.blueGaurdInfectedAmount = 0;
+        this.blueViperInfectedAmount = 0;
 
         this.verbose = verbose;
     }
@@ -92,12 +112,10 @@ public class Map
                 if (i == teamAHQ.x && j == teamAHQ.y)
                 {
                     location += 'A';
-                }
-                else if (i == teamBHQ.x && j == teamBHQ.y)
+                } else if (i == teamBHQ.x && j == teamBHQ.y)
                 {
                     location += 'B';
-                }
-                else
+                } else
                 {
                     location += current.getRubble();
                 }
@@ -215,14 +233,13 @@ public class Map
             }
 
             in.close();
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             System.out.println(e);
         }
 
 
-        return new int[] {height, width};
+        return new int[]{height, width};
     }
 
     /**
@@ -275,8 +292,7 @@ public class Map
                     if (x.contains("initialRubble"))
                     {
                         units = true;
-                    }
-                    else
+                    } else
                     {
                         String[] row = x.split(">");
                         row = row[1].split("<");
@@ -289,8 +305,7 @@ public class Map
                         rubbleAmounts[index] = row;
                         index++;
                     }
-                }
-                else
+                } else
                 {
                     if (!done)
                     {
@@ -298,18 +313,16 @@ public class Map
                         {
                             done = true;
                         }
-                    }
-                    else
+                    } else
                     {
                         if (x.contains("initialRobots"))
                         {
                             break;
-                        }
-                        else
+                        } else
                         {
                             int startIndex = x.indexOf("originOffsetX") + 15;
                             int endIndex = startIndex + 2;
-                            if (x.charAt(endIndex-1) < '0' || x.charAt(endIndex-1) > '9')
+                            if (x.charAt(endIndex - 1) < '0' || x.charAt(endIndex - 1) > '9')
                             {
                                 endIndex--;
                             }
@@ -320,7 +333,7 @@ public class Map
 
                             startIndex = x.indexOf("originOffsetY") + 15;
                             endIndex = startIndex + 2;
-                            if (x.charAt(endIndex-1) < '0' || x.charAt(endIndex-1) > '9')
+                            if (x.charAt(endIndex - 1) < '0' || x.charAt(endIndex - 1) > '9')
                             {
                                 endIndex--;
                             }
@@ -341,77 +354,80 @@ public class Map
                                 if (isTeamA)
                                 {
                                     unitStrings[unit_x][unit_y] = "sa";
-                                }
-                                else
+                                } else
                                 {
                                     unitStrings[unit_x][unit_y] = "sb";
                                 }
-                            }
-                            else if (x.contains("GUARD"))
+                            } else if (x.contains("GUARD"))
                             {
                                 if (isTeamA)
                                 {
                                     unitStrings[unit_x][unit_y] = "ga";
-                                }
-                                else
+                                } else
                                 {
                                     unitStrings[unit_x][unit_y] = "gb";
                                 }
-                            }
-                            else if (x.contains("VIPER"))
+                            } else if (x.contains("VIPER"))
                             {
                                 if (isTeamA)
                                 {
                                     unitStrings[unit_x][unit_y] = "va";
-                                }
-                                else
+                                } else
                                 {
                                     unitStrings[unit_x][unit_y] = "vb";
                                 }
-                            }
-                            else if (x.contains("TURRET"))
+                            } else if (x.contains("TURRET"))
                             {
                                 if (isTeamA)
                                 {
                                     unitStrings[unit_x][unit_y] = "ta";
-                                }
-                                else
+                                } else
                                 {
                                     unitStrings[unit_x][unit_y] = "tb";
                                 }
-                            }
-                            else if (x.contains("ARCHON"))
+                            } else if (x.contains("ARCHON"))
                             {
                                 if (isTeamA)
                                 {
                                     unitStrings[unit_x][unit_y] = "ra";
-                                }
-                                else
+                                } else
                                 {
                                     unitStrings[unit_x][unit_y] = "rb";
                                 }
-                            }
-                            else if (x.contains("TTM"))
+                            } else if (x.contains("TTM"))
                             {
                                 if (isTeamA)
                                 {
                                     unitStrings[unit_x][unit_y] = "ma";
-                                }
-                                else
+                                } else
                                 {
                                     unitStrings[unit_x][unit_y] = "mb";
                                 }
-                            }
-                            else if (x.contains("SCOUT"))
+                            } else if (x.contains("SCOUT"))
                             {
                                 if (isTeamA)
                                 {
                                     unitStrings[unit_x][unit_y] = "ca";
-                                }
-                                else
+                                } else
                                 {
                                     unitStrings[unit_x][unit_y] = "cb";
                                 }
+                            }
+                            else if (x.contains("STANDARDZOMBIE"))
+                            {
+                                unitStrings[unit_x][unit_y] = "zs";
+                            }
+                            else if (x.contains("RANGEDZOMBIE"))
+                            {
+                                unitStrings[unit_x][unit_y] = "zr";
+                            }
+                            else if (x.contains("FASTZOMBIE"))
+                            {
+                                unitStrings[unit_x][unit_y] = "zf";
+                            }
+                            else if (x.contains("BIGZOMBIE"))
+                            {
+                                unitStrings[unit_x][unit_y] = "zb";
                             }
                         }
                     }
@@ -419,8 +435,7 @@ public class Map
             }
 
             in.close();
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             System.out.println(e);
         }
@@ -437,8 +452,7 @@ public class Map
                     {
                         rubbleAmount *= 10;
                         rubbleAmount += Integer.parseInt(rubbleAmounts[i][j].charAt(k) + "");// - '0';
-                    }
-                    else if (rubbleAmounts[i][j].charAt(k) == '.')
+                    } else if (rubbleAmounts[i][j].charAt(k) == '.')
                     {
                         break;
                     }
@@ -448,8 +462,7 @@ public class Map
                 if (unitStrings[i][j].contains("a"))
                 {
                     team = Team.A;
-                }
-                else if (unitStrings[i][j].contains("b"))
+                } else if (unitStrings[i][j].contains("b"))
                 {
                     team = Team.B;
                 }
@@ -457,7 +470,27 @@ public class Map
 
                 RobotType robotType = null;
 
-                if (unitStrings[i][j].contains("s"))
+                if (unitStrings[i][j].contains("zs"))
+                {
+                    team = Team.ZOMBIE;
+                    robotType = RobotType.STANDARDZOMBIE;
+                }
+                else if (unitStrings[i][j].contains("zr"))
+                {
+                    team = Team.ZOMBIE;
+                    robotType = RobotType.RANGEDZOMBIE;
+                }
+                else if (unitStrings[i][j].contains("zf"))
+                {
+                    team = Team.ZOMBIE;
+                    robotType = RobotType.FASTZOMBIE;
+                }
+                else if (unitStrings[i][j].contains("zb"))
+                {
+                    team = Team.ZOMBIE;
+                    robotType = RobotType.BIGZOMBIE;
+                }
+                else if (unitStrings[i][j].contains("s"))
                 {
                     robotType = RobotType.SOLDIER;
 
@@ -528,43 +561,40 @@ public class Map
                     // This is the team that we are training
                     MockRobotPlayer robotPlayer;
 
-                    if (team == Team.A)
+                    if (team == Team.ZOMBIE)
+                    {
+                        robotPlayer = new Zombie(robotController, weights1);
+                        totalZombieHealth += robotController.getHealth();
+                    }
+                    else if (team == Team.A)
                     {
                         if (teamA == 1)
                         {
                             robotPlayer = new team044(robotController, weights1);
-                        }
-                        else
+                        } else
                         {
                             if (RobotType.SOLDIER == robotType)
                             {
                                 robotPlayer = new Soldier(robotController, weights1);
-                            }
-                            else if (robotType == RobotType.ARCHON)
+                            } else if (robotType == RobotType.ARCHON)
                             {
                                 robotPlayer = new Archon(robotController, weights1);
-                            }
-                            else if (robotType == RobotType.SCOUT)
+                            } else if (robotType == RobotType.SCOUT)
                             {
                                 robotPlayer = new Scout(robotController, weights1);
-                            }
-                            else if (robotType == RobotType.GUARD)
+                            } else if (robotType == RobotType.GUARD)
                             {
                                 robotPlayer = new Gaurd(robotController, weights1);
-                            }
-                            else if (robotType == RobotType.VIPER)
+                            } else if (robotType == RobotType.VIPER)
                             {
                                 robotPlayer = new Viper(robotController, weights1);
-                            }
-                            else if (robotType == RobotType.TURRET)
+                            } else if (robotType == RobotType.TURRET)
                             {
                                 robotPlayer = new Turret(robotController, weights1);
-                            }
-                            else if (robotType == RobotType.TTM)
+                            } else if (robotType == RobotType.TTM)
                             {
                                 robotPlayer = new TTM(robotController, weights1);
-                            }
-                            else
+                            } else
                             {
                                 robotPlayer = new Soldier(robotController, weights1);
                             }
@@ -575,38 +605,30 @@ public class Map
                         if (teamB == 1)
                         {
                             robotPlayer = new team044(robotController, weights2);
-                        }
-                        else
+                        } else
                         {
                             if (RobotType.SOLDIER == robotType)
                             {
                                 robotPlayer = new Soldier(robotController, weights2);
-                            }
-                            else if (robotType == RobotType.ARCHON)
+                            } else if (robotType == RobotType.ARCHON)
                             {
                                 robotPlayer = new Archon(robotController, weights2);
-                            }
-                            else if (robotType == RobotType.SCOUT)
+                            } else if (robotType == RobotType.SCOUT)
                             {
                                 robotPlayer = new Scout(robotController, weights2);
-                            }
-                            else if (robotType == RobotType.GUARD)
+                            } else if (robotType == RobotType.GUARD)
                             {
                                 robotPlayer = new Gaurd(robotController, weights2);
-                            }
-                            else if (robotType == RobotType.VIPER)
+                            } else if (robotType == RobotType.VIPER)
                             {
                                 robotPlayer = new Viper(robotController, weights2);
-                            }
-                            else if (robotType == RobotType.TURRET)
+                            } else if (robotType == RobotType.TURRET)
                             {
                                 robotPlayer = new Turret(robotController, weights2);
-                            }
-                            else if (robotType == RobotType.TTM)
+                            } else if (robotType == RobotType.TTM)
                             {
                                 robotPlayer = new TTM(robotController, weights2);
-                            }
-                            else
+                            } else
                             {
                                 robotPlayer = new Soldier(robotController, weights2);
                             }
@@ -615,8 +637,7 @@ public class Map
                     }
 
                     initialMap[i][j] = new MockMapLocation(i, j, rubbleAmount, robotPlayer);
-                }
-                else
+                } else
                 {
                     initialMap[i][j] = new MockMapLocation(i, j, rubbleAmount);
                 }
@@ -761,6 +782,15 @@ public class Map
         }
     }
 
+    public void clearRubble(double amount, MapLocation loc)
+    {
+        mapLayout[loc.x][loc.y].rubble -= amount;
+    }
+
+    public double getRubble(MapLocation loc)
+    {
+        return mapLayout[loc.x][loc.y].getRubble();
+    }
 
     public MapLocation getHQLocation(Team team)
     {
@@ -771,20 +801,70 @@ public class Map
         return teamBHQ;
     }
 
+    public void unitDiedToViper(MapLocation loc, RobotType type)
+    {
+        mapLayout[loc.x][loc.y].removeRobotPlayer();
+        MockRobotController rc = new MockRobotController(Team.ZOMBIE, type.turnsInto, loc, this);
+        MockRobotPlayer mockRobotPlayer = new Zombie(rc, weights1);
+        this.totalZombieHealth += rc.getHealth();
+        mapLayout[loc.x][loc.y].setRobotPlayer(mockRobotPlayer);
+    }
+
     public void attackLocation(MapLocation loc, double attackAmount, MapLocation attackFrom)
     {
         MockRobotPlayer player = mapLayout[loc.x][loc.y].getRobotPlayer();
-        MockRobotPlayer attacker = mapLayout[loc.x][loc.y].getRobotPlayer();
+        MockRobotPlayer attacker = mapLayout[attackFrom.x][attackFrom.y].getRobotPlayer();
 
-        if (player != null)
+        if (player != null && attacker != null)
         {
+            if (attacker.getRc().getType() == RobotType.VIPER)
+            {
+                ((MockRobotController) player.getRc()).infectedByViper(10);
+            }
+            else if (attacker.getRc().getTeam() == Team.ZOMBIE)
+            {
+                ((MockRobotController) player.getRc()).infectedByZombie(10);
+            }
+
             player.takeDamage(attackAmount);
             double damageAmount = attackAmount;
+
+            if (player.getRc().getTeam() == Team.ZOMBIE && attacker.getRc().getType() == RobotType.GUARD)
+            {
+                player.takeDamage(attackAmount);
+                damageAmount *= 2;
+            }
 
             if (player.getHealth() <= 0)
             {
                 damageAmount += player.getHealth();
                 mapLayout[loc.x][loc.y].removeRobotPlayer();
+                if (player.getRc().getTeam() != Team.ZOMBIE && player.getRc().isInfected())
+                {
+                    MockRobotController mockRobotController = new MockRobotController(Team.ZOMBIE, player.getRc().getType().turnsInto, loc, this);
+                    MockRobotPlayer zombie = new Zombie(mockRobotController, weights1);
+                    this.totalZombieHealth += mockRobotController.getHealth();
+                    mapLayout[loc.x][loc.y].setRobotPlayer(zombie);
+
+                    if (player.getRc().getTeam() == Team.A)
+                    {
+                        if (player.getRc().getType() == RobotType.SOLDIER)
+                            this.redSoldierInfectedAmount += mockRobotController.getHealth();
+                        else if (player.getRc().getType() == RobotType.GUARD)
+                            this.redGaurdInfectedAmount += mockRobotController.getHealth();
+                        else if (player.getRc().getType() == RobotType.VIPER)
+                            this.redViperInfectedAmount += mockRobotController.getHealth();
+                    }
+                    else
+                    {
+                        if (player.getRc().getType() == RobotType.SOLDIER)
+                            this.blueSoldierInfectedAmount += mockRobotController.getHealth();
+                        else if (player.getRc().getType() == RobotType.GUARD)
+                            this.blueGaurdInfectedAmount += mockRobotController.getHealth();
+                        else if (player.getRc().getType() == RobotType.VIPER)
+                            this.blueViperInfectedAmount += mockRobotController.getHealth();
+                    }
+                }
             }
 
             if (verbose)
@@ -839,8 +919,12 @@ public class Map
                 {
                     this.blueViperDamageDealt += damageAmount;
                 }
+                else
+                {
+                    this.totalZombieDamage += damageAmount;
+                }
             }
-            else
+            else if (player.getRc().getTeam() == Team.B)
             {
                 if (player.getRc().getType() == RobotType.SOLDIER)
                 {
@@ -887,22 +971,71 @@ public class Map
                 {
                     this.redViperDamageDealt += damageAmount;
                 }
+                else
+                {
+                    this.totalZombieDamage += damageAmount;
+                }
             }
-
+            else if (player.getRc().getTeam() == Team.ZOMBIE)
+            {
+                this.totalZombieHealth -= damageAmount;
+                if (attacker.getRc().getTeam() == Team.A)
+                {
+                    if (attacker.getRc().getType() == RobotType.SOLDIER)
+                    {
+                        this.redSoldierDamageDealt += damageAmount;
+                    }
+                    else if (attacker.getRc().getType() == RobotType.GUARD)
+                    {
+                        this.redGaurdDamageDealt += damageAmount;
+                    }
+                    else if (attacker.getRc().getType() == RobotType.TURRET)
+                    {
+                        this.redTurretDamageDealt += damageAmount;
+                    }
+                    else if (attacker.getRc().getType() == RobotType.VIPER)
+                    {
+                        this.redViperDamageDealt += damageAmount;
+                    }
+                }
+                else if (attacker.getRc().getTeam() == Team.B)
+                {
+                    if (attacker.getRc().getType() == RobotType.SOLDIER)
+                    {
+                        this.blueSoldierDamageDealt += damageAmount;
+                    }
+                    else if (attacker.getRc().getType() == RobotType.GUARD)
+                    {
+                        this.blueGaurdDamageDealt += damageAmount;
+                    }
+                    else if (attacker.getRc().getType() == RobotType.TURRET)
+                    {
+                        this.blueTurretDamageDealt += damageAmount;
+                    }
+                    else if (attacker.getRc().getType() == RobotType.VIPER)
+                    {
+                        this.blueViperDamageDealt += damageAmount;
+                    }
+                }
+            }
+        }
+        else
+        {
+//            System.out.println("Attacker: " + attacker + " Player: " + player);
         }
     }
 
     public double[] getBlueDamageDealt()
     {
-        return new double[] {
+        return new double[]{
                 this.blueSoldierDamageDealt, this.blueGaurdDamageDealt, this.blueTurretDamageDealt, this.blueViperDamageDealt
         };
     }
 
     public double[] getBlueTotalHealth()
     {
-        return new double[] {
-            this.blueSoldierTotalHealth, this.blueGaurdTotalHealth, this.blueTurretTotalHealth, this.blueViperTotalHealth, this.blueScoutTotalHealth, this.blueArchonTotalHealth, this.blueTTMTotalHealth
+        return new double[]{
+                this.blueSoldierTotalHealth, this.blueGaurdTotalHealth, this.blueTurretTotalHealth, this.blueViperTotalHealth, this.blueScoutTotalHealth, this.blueArchonTotalHealth, this.blueTTMTotalHealth
         };
     }
 
@@ -920,12 +1053,30 @@ public class Map
         };
     }
 
+    public double[] getRedInfectedAmount()
+    {
+        return new double[] {
+                this.redSoldierInfectedAmount, this.redGaurdInfectedAmount, this.redViperInfectedAmount
+        };
+    }
+
+    public double[] getBlueInfectedAmount()
+    {
+        return new double[] {
+                this.blueSoldierInfectedAmount, this.blueGaurdInfectedAmount, this.blueViperInfectedAmount
+        };
+    }
+
     public void printRedDamage()
     {
         System.out.print("Red Soldier Damage: " + this.redSoldierDamageDealt);
         System.out.print(" Red Guard Damage: " + this.redGaurdDamageDealt);
         System.out.print(" Red Turret Damage: " + this.redTurretDamageDealt);
         System.out.print(" Red Viper Damage: " + this.redViperDamageDealt);
+        System.out.println();
+        System.out.print("Red Soldier Infected Amount: " + this.redSoldierInfectedAmount);
+        System.out.print(" Red Guard Infected Amount: " + this.redGaurdInfectedAmount);
+        System.out.print(" Red Viper Infected Amount: " + this.redViperInfectedAmount);
         System.out.println();
     }
 
@@ -948,6 +1099,10 @@ public class Map
         System.out.print(" Blue Turret Damage: " + this.blueTurretDamageDealt);
         System.out.print(" Blue Viper Damage: " + this.blueViperDamageDealt);
         System.out.println();
+        System.out.print("Blue Soldier Infected Amount: " + this.blueSoldierInfectedAmount);
+        System.out.print(" Blue Guard Infected Amount: " + this.blueGaurdInfectedAmount);
+        System.out.print(" Blue Viper Infected Amount: " + this.blueViperInfectedAmount);
+        System.out.println();
     }
 
     public void printBlueHealth()
@@ -959,6 +1114,13 @@ public class Map
         System.out.print(" blue Scout Health: " + this.blueScoutTotalHealth);
         System.out.print(" blue Archon Health: " + this.blueArchonTotalHealth);
         System.out.print(" blue TTM Health: " + this.blueTTMTotalHealth);
+        System.out.println();
+    }
+
+    public void printZombie()
+    {
+        System.out.print("Zombie Health: " + this.totalZombieHealth);
+        System.out.print(" Zombie Damage: " + this.totalZombieDamage);
         System.out.println();
     }
 }

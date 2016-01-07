@@ -18,12 +18,13 @@ public class PSO
 
     public double[][] getBestWeights(int rounds, int popSize)
     {
-        double[][][] currentWeights = new double[popSize][][];
+        double[][][] currentWeights = new double[popSize][7][];
         double[][][] localBestWeights = new double[popSize][][];
         double[][] globalBest = null;
         double[][] localBestScores = new double[popSize][7];
         double[] globalBestScore = new double[7];
         double[][] currentFitness = new double[popSize][7];
+        int map = -1;
 
         // initialization
         for (int i = 0; i < popSize; i++)
@@ -37,7 +38,6 @@ public class PSO
             // 5 -> TTM
             // 6 -> Viper
 
-            currentWeights[i] = new double[7][];
             localBestWeights[i] = new double[7][];
 
 
@@ -56,6 +56,24 @@ public class PSO
 
         for (int i = 0; i < rounds; i++)
         {
+            if (i % 50 == 0)
+            {
+                map++;
+
+                // reset global and local best for new map
+                for (int k = 0; k < popSize; k++)
+                {
+                    for (int j = 0; j < 7; j++)
+                    {
+                        localBestWeights[k][j] = currentWeights[k][j];
+                        localBestScores[k][j] = 0;
+                        globalBestScore[j] = 0;
+                    }
+                }
+
+                globalBest = currentWeights[0];
+            }
+
             // first update all of the particles
             for (int j = 0; j < popSize; j++)
             {
@@ -70,7 +88,7 @@ public class PSO
                     // run match and record scores
                     if (j != k)
                     {
-                        double[][] results = Main.runFightSimulation(currentWeights[j], currentWeights[k], 0, 0, false, i);
+                        double[][] results = Main.runFightSimulation(currentWeights[j], currentWeights[k], 0, 0, false, map);
 
                         for (int l = 0; l < 7; l++)
                         {
@@ -86,15 +104,18 @@ public class PSO
             {
                 for (int k = 0; k < 7; k++)
                 {
-                    if (currentFitness[j][k] > localBestScores[j][k])
+                    if ((i % 50) > 0 && globalBestScore[k] != 0)
                     {
-                        localBestScores[j][k] = currentFitness[j][k];
-                        localBestWeights[j][k] = currentWeights[j][k];
-                    }
-                    if (currentFitness[j][k] > globalBestScore[k])
-                    {
-                        globalBestScore[k] = currentFitness[j][k];
-                        globalBest[k] = currentWeights[j][k];
+                        if (currentFitness[j][k] > localBestScores[j][k])
+                        {
+                            localBestScores[j][k] = currentFitness[j][k];
+                            localBestWeights[j][k] = currentWeights[j][k];
+                        }
+                        if (currentFitness[j][k] > globalBestScore[k])
+                        {
+                            globalBestScore[k] = currentFitness[j][k];
+                            globalBest[k] = currentWeights[j][k];
+                        }
                     }
                 }
             }
@@ -112,7 +133,7 @@ public class PSO
         {
             for (int j = 0; j < newWeights[i].length; j++)
             {
-                newWeights[i][j] = current[i][j] + (((2 * Math.random() * this.randomScale) - this.randomScale) + this.localScale * localBest[i][j] + this.globalScale * globalBest[i][j]);
+                newWeights[i][j] = current[i][j] + (((2 * Math.random() * this.randomScale) - this.randomScale) + this.localScale * (localBest[i][j] - current[i][j]) + this.globalScale * (globalBest[i][j] - current[i][j]));
             }
         }
 
