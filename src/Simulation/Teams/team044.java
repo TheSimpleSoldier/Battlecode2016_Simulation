@@ -16,13 +16,18 @@ public class team044 extends MockRobotPlayer {
 
     public void run() {
         RobotInfo[] nearByEnemies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, rc.getTeam().opponent());
+        RobotInfo[] nearByZombies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, Team.ZOMBIE);
 
-        if (nearByEnemies.length == 0 && rc.isCoreReady()) {
+        if (nearByEnemies.length == 0 && nearByZombies.length == 0 && rc.isCoreReady()) {
             // move towards target
             move(target);
         } else if (nearByEnemies.length > 0) {
             // fight
             runFightMicro(nearByEnemies, target);
+        }
+        else if (nearByZombies.length > 0)
+        {
+            runFightMicro(nearByZombies, target);
         }
     }
 

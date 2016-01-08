@@ -8,13 +8,15 @@ public class Game
     private double[][] team2Inputs;
     private Map map;
     private boolean verbose;
+    private boolean zombie;
 
-    public Game(double[][] team1Inputs, double[][] team2Inputs, boolean verbose)
+    public Game(double[][] team1Inputs, double[][] team2Inputs, boolean verbose, boolean zombie)
     {
         this.team1Inputs = team1Inputs;
         this.team2Inputs = team2Inputs;
         map = new Map(team1Inputs, team2Inputs, verbose);
         this.verbose = verbose;
+        this.zombie = zombie;
     }
 
     public void println(String string)
@@ -35,7 +37,7 @@ public class Game
 
     public void runMatch(String MapName, int teamA, int teamB)
     {
-        map.readInMap(MapName, map, teamA, teamB);
+        map.readInMap(MapName, map, teamA, teamB, zombie);
 
         MockRobotPlayer[] robotPlayers;
 
@@ -97,6 +99,8 @@ public class Game
         double[] blueTotalHealth = map.getBlueTotalHealth();
         double[] redInfectedAmount = map.getRedInfectedAmount();
         double[] blueInfectedAmount = map.getBlueInfectedAmount();
+        double redRepairAmount = map.getRedRepairAmount();
+        double blueRepairAmount = map.getBlueRepairAmount();
 
         // 0 -> Soldier
         // 1 -> Archon
@@ -108,7 +112,7 @@ public class Game
         if (team == 0)
         {
             results[0] = redDamageDealt[0] + 3 * redTotalHealth[0] - 2 * redInfectedAmount[0];
-            results[1] = redTotalHealth[5];
+            results[1] = 2 * redTotalHealth[5] + redRepairAmount;
             results[2] = 2 * redDamageDealt[1] + redTotalHealth[1] - 2 * redInfectedAmount[1];
             results[3] = redTotalHealth[4];
             results[4] = 3 * redDamageDealt[2] + redTotalHealth[2];
@@ -118,7 +122,7 @@ public class Game
         else
         {
             results[0] = blueDamageDealt[0] + 3 * blueTotalHealth[0] - 2 * blueInfectedAmount[0];
-            results[1] = blueTotalHealth[5];
+            results[1] = 2 * blueTotalHealth[5] + blueRepairAmount;
             results[2] = 2 * blueDamageDealt[1] + blueTotalHealth[1] - 2 * blueInfectedAmount[1];
             results[3] = blueTotalHealth[4];
             results[4] = 3 * blueDamageDealt[2] + blueTotalHealth[2];

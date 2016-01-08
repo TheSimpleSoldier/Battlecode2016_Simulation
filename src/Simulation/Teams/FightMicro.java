@@ -197,6 +197,124 @@ public class FightMicro
         return true;
     }
 
+    public boolean runPassiveFightMicro(RobotInfo[] enemies, RobotInfo[] nearByAllies, RobotInfo[] allies, MapLocation target, RobotInfo[] nearByEnemies, FeedForwardNeuralNetwork net) throws GameActionException
+    {
+        if (enemies.length == 0)
+        {
+            return false;
+        }
+
+        double alliedHealth = 0;
+        double enemyHealth = 0;
+        double offensiveEnemies = 0;
+        double enemiesInRangeOfUs = 0;
+        int enemy_x = 0;
+        int enemy_y = 0;
+        int ally_x = 0;
+        int ally_y = 0;
+
+        for (int i = 0; i < enemies.length; i++)
+        {
+            enemy_x += enemies[i].location.x;
+            enemy_y += enemies[i].location.y;
+            switch(enemies[i].type)
+            {
+                case VIPER:
+                case SOLDIER:
+                case GUARD:
+                case BIGZOMBIE:
+                case FASTZOMBIE:
+                case STANDARDZOMBIE:
+                case RANGEDZOMBIE:
+                case TURRET:
+                    offensiveEnemies++;
+                    enemyHealth += enemies[i].health;
+                    if (rc.getLocation().distanceSquaredTo(enemies[i].location) <= enemies[i].type.attackRadiusSquared)
+                        enemiesInRangeOfUs++;
+            }
+        }
+
+        enemy_x /= enemies.length;
+        enemy_y /= enemies.length;
+
+        for (int i = allies.length; --i >= 0; )
+        {
+            alliedHealth += allies[i].health;
+            ally_x += allies[i].location.x;
+            ally_y += allies[i].location.y;
+        }
+
+        if (allies.length > 0)
+        {
+            ally_x /= allies.length;
+            ally_y /= allies.length;
+        }
+
+        double[] inputs = new double[] {
+                offensiveEnemies / 10,
+                allies.length / 10,
+                alliedHealth / 10,
+                enemyHealth / 10,
+                nearByEnemies.length / 10,
+                enemiesInRangeOfUs / 10
+        };
+
+        Direction dir;
+
+        boolean retreat = false;
+        boolean advance = false;
+        boolean cluster = false;
+        boolean standGround = false;
+        double[] output = net.compute(inputs);
+
+        // retreat
+        if (output[0] > 0.5)
+        {
+            retreat = true;
+        }
+
+        // advance
+        if (output[1] > 0.5) {
+            advance = true;
+        }
+
+        // cluster
+        if (output[2] > 0.5) {
+            cluster = true;
+        }
+
+        // standGround
+        if (output[3] > 0.5) {
+            standGround = true;
+        }
+
+        if (rc.isCoreReady()) {
+            if (retreat) {
+                MapLocation enemy = new MapLocation(enemy_x, enemy_y);
+                dir = rc.getLocation().directionTo(enemy).opposite();
+                moveDir(dir);
+            }
+
+            if (rc.isCoreReady() && cluster) {
+                MapLocation ally = new MapLocation(ally_x, ally_y);
+                dir = rc.getLocation().directionTo(ally);
+                moveDir(dir);
+            }
+
+            if (rc.isCoreReady() && advance) {
+                dir = getDir(target);
+                moveDir(dir);
+            }
+
+            if (rc.isCoreReady() && standGround) {
+                // do nothing
+            }
+        }
+
+        return true;
+    }
+
+
     /**
      * Creates inputs for network
      * 2 are for center of mass of enemy

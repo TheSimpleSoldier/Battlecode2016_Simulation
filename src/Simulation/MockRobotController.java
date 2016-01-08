@@ -500,7 +500,7 @@ public class MockRobotController implements RobotController
      */
     public void repair(MapLocation loc)
     {
-        throw new Error("repair not implemented");
+        map.repair(loc);
     }
 
     /**

@@ -143,6 +143,11 @@ public abstract class MockRobotPlayer
         return false;
     }
 
+    public void repair()
+    {
+        ((MockRobotController) rc).takeDamage(-1);
+    }
+
     public RobotController getRc()
     {
         return this.rc;

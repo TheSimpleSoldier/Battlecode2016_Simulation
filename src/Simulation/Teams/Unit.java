@@ -11,6 +11,13 @@ public abstract class Unit extends MockRobotPlayer
     FightMicro fightMicro;
     Navigator navigator;
 
+    RobotInfo[] nearByEnemies;
+    RobotInfo[] enemies;
+    RobotInfo[] nearByAllies;
+    RobotInfo[] allies;
+    RobotInfo[] nearByZombies;
+    RobotInfo[] zombies;
+
     public Unit(RobotController rc, double[][] weights)
     {
         super(rc, weights);
@@ -21,22 +28,30 @@ public abstract class Unit extends MockRobotPlayer
 
     public void run()
     {
-        RobotInfo[] nearByEnemies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, rc.getTeam().opponent());
-        RobotInfo[] enemies = rc.senseNearbyRobots(rc.getType().sensorRadiusSquared, rc.getTeam().opponent());
+        nearByEnemies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, rc.getTeam().opponent());
+        enemies = rc.senseNearbyRobots(rc.getType().sensorRadiusSquared, rc.getTeam().opponent());
 
-        RobotInfo[] nearByAllies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, rc.getTeam());
-        RobotInfo[] allies = rc.senseNearbyRobots(rc.getType().sensorRadiusSquared, rc.getTeam());
+        nearByAllies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, rc.getTeam());
+        allies = rc.senseNearbyRobots(rc.getType().sensorRadiusSquared, rc.getTeam());
 
-        RobotInfo[] nearByZombies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, Team.ZOMBIE);
-        RobotInfo[] zombies = rc.senseNearbyRobots(rc.getType().sensorRadiusSquared, Team.ZOMBIE);
+        nearByZombies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, Team.ZOMBIE);
+        zombies = rc.senseNearbyRobots(rc.getType().sensorRadiusSquared, Team.ZOMBIE);
 
 
         try
         {
-            if (this.fightMicro.runFightMicro(enemies, nearByAllies, allies, target, nearByEnemies, net));
-            else if (this.fightMicro.runFightMicro(zombies, nearByAllies, allies, target, nearByZombies, net));
-            else if (rc.isCoreReady()) navigator.move(target);
-
+            if (rc.getType() == RobotType.SOLDIER || rc.getType() == RobotType.GUARD  || rc.getType() == RobotType.VIPER)
+            {
+                if (this.fightMicro.runFightMicro(enemies, nearByAllies, allies, target, nearByEnemies, net));
+                else if (this.fightMicro.runFightMicro(zombies, nearByAllies, allies, target, nearByZombies, net));
+                else if (rc.isCoreReady()) navigator.move(target);
+            }
+            else
+            {
+                if (this.fightMicro.runPassiveFightMicro(enemies, nearByAllies, allies, target, nearByEnemies, net));
+                else if (this.fightMicro.runPassiveFightMicro(zombies, nearByAllies, allies, target, nearByZombies, net));
+                else if (rc.isCoreReady()) navigator.move(target);
+            }
         }
         catch (Exception e)
         {

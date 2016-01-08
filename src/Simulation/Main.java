@@ -4,8 +4,14 @@ import java.io.*;
 
 public class Main
 {
-    static boolean zombie = true;
+    static boolean zombie = false;
     static boolean soldier = false;
+    static boolean archon = false;
+    static boolean viper = false;
+    static boolean guard = false;
+    static boolean turret = false;
+    static boolean ttm = false;
+    static boolean scout = false;
 
     /**
      * This is the main function which triggers simulations
@@ -51,67 +57,311 @@ public class Main
                 }
         };
 
-        runFightSimulation(gaWeights, gaWeights, 0, 0, true, 1);
+        //runFightSimulation(gaWeights, gaWeights, 0, 0, true, 0);
 
-        //runFightSimulation(inputs, inputs);
-
-//        System.out.println("Basic vs. Advanced");
-//        runFightSimulation(null, null, 1, 2, true, 2);
-//        System.out.println("Advanced vs. Basic");
-//        runFightSimulation(null, null, 2, 1, true, 2);
+        double startScore = getScores(gaWeights, gaWeights, 0, 1)[0];
+        double currentScore = startScore;
+        double newScore = 0;
 
         long startTime = System.currentTimeMillis();
-
-
-
-//        GA ga = new GA();
-//        double[][] idealWeights = gaWeights; // ga.runGA(10, 1, mutationRate, crossOverRate, mutationAmount); //getIdealWeights(10, 1, mutationRate, crossOverRate, mutationAmount);
-//
         PSO pso = new PSO(globalScale, localScale, randomScale);
-        double[][] idealWeights2 = pso.getBestWeights(100, 10);
+
+        reset();
+        soldier = true;
+        setPSO(pso);
+        double[][][] idealWeights = pso.getInitialPopulation(200, 10);
+        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
+        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+        currentScore = newScore;
+
+        reset();
+        scout = true;
+        setPSO(pso);
+        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
+        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
+        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+        currentScore = newScore;
+
+        reset();
+        archon = true;
+        setPSO(pso);
+        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
+        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
+        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+        currentScore = newScore;
+
+        reset();
+        guard = true;
+        setPSO(pso);
+        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
+        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
+        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+        currentScore = newScore;
+
+        reset();
+        viper = true;
+        setPSO(pso);
+        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
+        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
+        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+        currentScore = newScore;
+
+        reset();
+        ttm = true;
+        setPSO(pso);
+        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
+        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
+        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+        currentScore = newScore;
+
+        reset();
+        soldier = true;
+        guard = true;
+        setPSO(pso);
+        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
+        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
+        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+        currentScore = newScore;
+
+        reset();
+        soldier = true;
+        viper = true;
+        setPSO(pso);
+        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
+        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
+        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+        currentScore = newScore;
+
+        reset();
+        guard = true;
+        turret = true;
+        setPSO(pso);
+        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
+        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
+        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+        currentScore = newScore;
+
+        reset();
+        soldier = true;
+        guard = true;
+        archon = true;
+        viper = true;
+        scout = true;
+        ttm = true;
+        turret = true;
+        setPSO(pso);
+        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
+        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
+        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+        currentScore = newScore;
+
+        double[][] bestWeights = getBestWeights(idealWeights);
+        newScore = getScores(bestWeights, gaWeights, 0, 1)[0];
+        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
 
         System.out.println("PSO Weights:");
 
-        for (int i = 0; i < idealWeights2.length; i++)
+        for (int i = 0; i < bestWeights.length; i++)
         {
-            for (int j = 0; j < idealWeights2[i].length; j++)
+            for (int j = 0; j < bestWeights[i].length; j++)
             {
-                System.out.print(idealWeights2[i][j] + ", ");
+                System.out.print(bestWeights[i][j] + ", ");
             }
             System.out.println();
         }
 
-        runFightSimulation(idealWeights2, idealWeights2, 0, 0, true, 1);
-//
-//        System.out.println("GA: ");
-//        for (int i = 0; i < idealWeights.length; i++)
-//        {
-//            for (int j = 0; j < idealWeights[i].length; j++)
-//            {
-//                System.out.print(idealWeights[i][j] + ", ");
-//            }
-//            System.out.println();
-//        }
-//
-//        verbose = true;
-//
-//        for (int i = 0; i < 2; i++)
-//        {
-//            System.out.println("GA is Red:");
-//            runFightSimulation(idealWeights, idealWeights2, 0, 0, verbose, 1);
-//            System.out.println("GA is blue");
-//            runFightSimulation(idealWeights2, idealWeights, 0, 0, verbose, 1);
-//            System.out.println("GA vs. basic");
-//            runFightSimulation(idealWeights, idealWeights, 0, 1, verbose, 1);
-//            System.out.println("basic vs. GA");
-//            runFightSimulation(idealWeights, idealWeights, 1, 0, verbose, 1);
-//            System.out.println("PSO vs. basic");
-//            runFightSimulation(idealWeights2, idealWeights2, 0, 1, verbose, 1);
-//            System.out.println("basic vs. PSO");
-//            runFightSimulation(idealWeights2, idealWeights2, 1, 0, verbose, 1);
-//        }
-//
-        System.out.println("Run Time: " + (System.currentTimeMillis() - startTime));
+        runFightSimulation(bestWeights, bestWeights, 0, 0, true, 0);
+
+        System.out.println("Run Time: " + ((System.currentTimeMillis() - startTime) / 1000));
+    }
+
+    /**
+     * This method loops over a population and finds the one with the highest scores
+     *
+     * @param currentPop
+     * @return
+     */
+    public static double[][] getBestWeights(double[][][] currentPop)
+    {
+        double[][] bestWeights = null;
+
+        double[] scores = new double[currentPop.length];
+
+        for (int i = 0; i < currentPop.length; i++)
+        {
+            for (int j = 0; j < currentPop.length; j++)
+            {
+                if (i != j)
+                {
+                    double[] currentScores = getScores(currentPop[i], currentPop[j], 0, 0);
+                    scores[i] += currentScores[0];
+                    scores[j] += currentScores[1];
+                }
+            }
+        }
+
+        double bestScore = 0;
+
+        for (int i = 0; i < scores.length; i++)
+        {
+            if (bestScore < scores[i])
+            {
+                bestScore = scores[i];
+                bestWeights = currentPop[i];
+            }
+        }
+
+        return bestWeights;
+    }
+
+    /**
+     * This method returns the total score for two teams after running them on every map
+     *
+     * @param weights1
+     * @param weights2
+     * @param teamA
+     * @param teamB
+     * @return
+     */
+    public static double[] getScores(double[][] weights1, double[][] weights2, int teamA, int teamB)
+    {
+        double[] results = new double[2];
+        double[][][] currentResults = new double[80][2][7];
+        int index = 0;
+
+        for (int i = 0; i < 4; i++)
+        {
+            reset();
+            soldier = true;
+            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
+            index++;
+            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
+            index++;
+
+            reset();
+            scout = true;
+            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
+            index++;
+            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
+            index++;
+
+            reset();
+            archon = true;
+            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
+            index++;
+            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
+            index++;
+
+            reset();
+            guard = true;
+            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
+            index++;
+            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
+            index++;
+
+            reset();
+            viper = true;
+            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
+            index++;
+            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
+            index++;
+
+            reset();
+            ttm = true;
+            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
+            index++;
+            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
+            index++;
+
+            reset();
+            soldier = true;
+            guard = true;
+            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
+            index++;
+            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
+            index++;
+
+            reset();
+            soldier = true;
+            viper = true;
+            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
+            index++;
+            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
+            index++;
+
+            reset();
+            guard = true;
+            turret = true;
+            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
+            index++;
+            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
+            index++;
+
+            reset();
+            soldier = true;
+            guard = true;
+            archon = true;
+            viper = true;
+            scout = true;
+            ttm = true;
+            turret = true;
+            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
+            index++;
+            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
+            index++;
+        }
+
+        for (int i = 0; i < currentResults.length; i++)
+        {
+            if (i % 2 == 0)
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    results[0] += currentResults[i][0][j];
+                    results[1] += currentResults[i][1][j];
+                }
+            }
+            else
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    results[0] += currentResults[i][1][j];
+                    results[1] += currentResults[i][0][j];
+                }
+            }
+        }
+
+        return results;
+    }
+
+    /**
+     * This method sets the current unit run types to pso
+     *
+     * @param pso
+     */
+    public static void setPSO(PSO pso)
+    {
+        pso.setRunSoldier(soldier);
+        pso.setRunGuard(guard);
+        pso.setRunArchon(archon);
+        pso.setRunScout(scout);
+        pso.setRunViper(viper);
+        pso.setRunTTM(ttm);
+        pso.setRunTurret(turret);
+    }
+
+    /**
+     * This method sets all run types to false
+     */
+    public static void reset()
+    {
+        soldier = false;
+        archon = false;
+        viper = false;
+        guard = false;
+        turret = false;
+        ttm = false;
+        scout = false;
     }
 
     /**
@@ -146,33 +396,225 @@ public class Main
             System.out.println("Simulating a match");
         }
 
-        Game game = new Game(team1Inputs, team2Inputs, verbose);
+        Game game = new Game(team1Inputs, team2Inputs, verbose, zombie);
 
         // Battlecode2016_Simulation/src/Simulation
         String map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierTest1.xml";
 
-        if (soldier)
+        if (zombie)
         {
-            if (round % 4 == 0)
+            if (soldier)
             {
-                map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierTest1.xml";
-            }
-            else if (round % 4 == 1)
-            {
-                map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGaurd1.xml";
-            }
-            else if (round % 4 == 2)
-            {
-                map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierTest2.xml";
-            }
-            else if (round % 4 == 3)
-            {
-                map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTest1.xml";
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierZombie1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierZombie2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierZombie3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierZombie4.xml";
+                }
             }
         }
-        else if (zombie)
+        else
         {
-            map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGuardZombie.xml";
+            if (soldier && ttm && turret && viper && scout && archon && guard)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/All1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/All2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/All3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/All4.xml";
+                }
+            }
+            else if (soldier && guard)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGaurd1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGuard2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGuard3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGuard4.xml";
+                }
+            }
+            else if (soldier && viper)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierViper1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierViper2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierViper3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierViper4.xml";
+                }
+            }
+            else if (guard && turret)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTurret1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTurret2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTurret3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTurret4.xml";
+                }
+            }
+            else if (soldier)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierTest1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierTest2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierTest3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierTest4.xml";
+                }
+            }
+            else if (archon)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Archon1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Archon2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Archon3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Archon4.xml";
+                }
+            }
+            else if (ttm)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/TTM1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/TTM2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/TTM3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/TTM4.xml";
+                }
+            }
+            else if (scout)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Scout1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Scout2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Scout3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Scout4.xml";
+                }
+            }
+            else if (viper)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Viper1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Viper2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Viper3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/Viper4.xml";
+                }
+            }
+            else if (guard)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTest1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTest2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTest3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTest4.xml";
+                }
+            }
         }
 
         game.runMatch(map, teamA, teamB);

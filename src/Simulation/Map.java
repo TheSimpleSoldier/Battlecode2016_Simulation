@@ -47,6 +47,8 @@ public class Map
     private double blueSoldierInfectedAmount;
     private double blueGaurdInfectedAmount;
     private double blueViperInfectedAmount;
+    private int redRepairAmount;
+    private int blueRepairAmount;
 
     public Map(double[][] weights1, double[][] weights2, boolean verbose)
     {
@@ -84,6 +86,9 @@ public class Map
         this.blueSoldierInfectedAmount = 0;
         this.blueGaurdInfectedAmount = 0;
         this.blueViperInfectedAmount = 0;
+
+        this.redRepairAmount = 0;
+        this.blueRepairAmount = 0;
 
         this.verbose = verbose;
     }
@@ -133,11 +138,11 @@ public class Map
      *
      * @return
      */
-    public void readInMap(String mapName, Map map, int teamA, int teamB)
+    public void readInMap(String mapName, Map map, int teamA, int teamB, boolean zombie)
     {
         int[] mapDimensions = getMapWidthHeight(mapName);
 
-        mapLayout = getInitialMap(mapName, mapDimensions, map, teamA, teamB);
+        mapLayout = getInitialMap(mapName, mapDimensions, map, teamA, teamB, zombie);
     }
 
     /**
@@ -248,12 +253,20 @@ public class Map
      * @param mapName
      * @return
      */
-    private MockMapLocation[][] getInitialMap(String mapName, int[] mapDimensions, Map map, int teamA, int teamB)
+    private MockMapLocation[][] getInitialMap(String mapName, int[] mapDimensions, Map map, int teamA, int teamB, boolean zombie)
     {
         MockMapLocation[][] initialMap = new MockMapLocation[mapDimensions[0]][mapDimensions[1]];
 
-        teamBHQ = new MapLocation(0, mapDimensions[1] - 1);
-        teamAHQ = new MapLocation(mapDimensions[0] - 1, 0);
+        if (zombie)
+        {
+            teamAHQ = new MapLocation(0, mapDimensions[1] - 1);
+            teamBHQ = new MapLocation(mapDimensions[0] - 1, 0);
+        }
+        else
+        {
+            teamBHQ = new MapLocation(0, mapDimensions[1] - 1);
+            teamAHQ = new MapLocation(mapDimensions[0] - 1, 0);
+        }
 
         String[][] rubbleAmounts = new String[mapDimensions[0]][mapDimensions[1]];
         String[][] unitStrings = new String[mapDimensions[0]][mapDimensions[1]];
@@ -792,6 +805,25 @@ public class Map
         return mapLayout[loc.x][loc.y].getRubble();
     }
 
+    public void repair(MapLocation loc)
+    {
+        MockRobotPlayer mockRobotPlayer = mapLayout[loc.x][loc.y].getRobotPlayer();
+
+        if (mockRobotPlayer != null)
+        {
+            mockRobotPlayer.repair();
+
+            if (mapLayout[loc.x][loc.y].getRobotPlayer().getRc().getTeam() == Team.A)
+            {
+                this.redRepairAmount++;
+            }
+            else
+            {
+                this.blueRepairAmount++;
+            }
+        }
+    }
+
     public MapLocation getHQLocation(Team team)
     {
         if (team == Team.A)
@@ -804,10 +836,13 @@ public class Map
     public void unitDiedToViper(MapLocation loc, RobotType type)
     {
         mapLayout[loc.x][loc.y].removeRobotPlayer();
-        MockRobotController rc = new MockRobotController(Team.ZOMBIE, type.turnsInto, loc, this);
-        MockRobotPlayer mockRobotPlayer = new Zombie(rc, weights1);
-        this.totalZombieHealth += rc.getHealth();
-        mapLayout[loc.x][loc.y].setRobotPlayer(mockRobotPlayer);
+        if (type.turnsInto != null)
+        {
+            MockRobotController rc = new MockRobotController(Team.ZOMBIE, type.turnsInto, loc, this);
+            MockRobotPlayer mockRobotPlayer = new Zombie(rc, weights1);
+            this.totalZombieHealth += rc.getHealth();
+            mapLayout[loc.x][loc.y].setRobotPlayer(mockRobotPlayer);
+        }
     }
 
     public void attackLocation(MapLocation loc, double attackAmount, MapLocation attackFrom)
@@ -1067,6 +1102,16 @@ public class Map
         };
     }
 
+    public double getRedRepairAmount()
+    {
+        return this.redRepairAmount;
+    }
+
+    public double getBlueRepairAmount()
+    {
+        return this.blueRepairAmount;
+    }
+
     public void printRedDamage()
     {
         System.out.print("Red Soldier Damage: " + this.redSoldierDamageDealt);
@@ -1089,6 +1134,7 @@ public class Map
         System.out.print(" Red Scout Health: " + this.redScoutTotalHealth);
         System.out.print(" Red Archon Health: " + this.redArchonTotalHealth);
         System.out.print(" Red TTM Health: " + this.redTTMTotalHealth);
+        System.out.print(" Red Repair Amount: " + this.redRepairAmount);
         System.out.println();
     }
 
@@ -1114,6 +1160,7 @@ public class Map
         System.out.print(" blue Scout Health: " + this.blueScoutTotalHealth);
         System.out.print(" blue Archon Health: " + this.blueArchonTotalHealth);
         System.out.print(" blue TTM Health: " + this.blueTTMTotalHealth);
+        System.out.print(" blue Repair Amount: " + this.blueRepairAmount);
         System.out.println();
     }
 
