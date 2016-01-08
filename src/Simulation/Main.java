@@ -13,6 +13,52 @@ public class Main
     static boolean ttm = false;
     static boolean scout = false;
 
+    static final int soldierIndex = 0;
+    static final int archonIndex = 1;
+    static final int viperIndex = 2;
+    static final int guardIndex = 3;
+    static final int turretIndex = 4;
+    static final int ttmIndex = 5;
+    static final int scoutIndex = 6;
+
+    static boolean[] units = new boolean[7];
+
+    static final boolean[][] unitCombos = new boolean[][] {
+            {
+                    true, false, false, false, false, false, false
+            },
+            {
+                    false, true, false, false, false, false, false
+            },
+            {
+                    false, false, true, false, false, false, false
+            },
+            {
+                    false, false, false, true, false, false, false
+            },
+            {
+                    false, false, false, false, true, false, false
+            },
+            {
+                    false, false, false, false, false, true, false
+            },
+            {
+                    false, false, false, false, false, false, true
+            },
+            {
+                    true, false, false, true, false, false, false
+            },
+            {
+                    true, false, true, false, false, false, false
+            },
+            {
+                    false, false, false, true, true, false, false
+            },
+            {
+                    true, true, true, true, true, true, true
+            },
+    };
+
     /**
      * This is the main function which triggers simulations
      * @param args
@@ -26,6 +72,8 @@ public class Main
         double globalScale = 0.1;
         double localScale = 0.2;
         double randomScale = 0.3;
+        long unitStartTime = 0;
+        long unitEndTime = 0;
 
         double[][] psoWeights = {
                 {
@@ -59,105 +107,36 @@ public class Main
 
         //runFightSimulation(gaWeights, gaWeights, 0, 0, true, 0);
 
-        double startScore = getScores(gaWeights, gaWeights, 0, 1)[0];
-        double currentScore = startScore;
-        double newScore = 0;
+        reset();
+        soldier = true;
+        System.out.println("Training Soldiers");
+        double startScore = getResultsForCurrentMaps(gaWeights, gaWeights, 0, 1)[0];
+        double currentScore;
+        double newScore;
 
         long startTime = System.currentTimeMillis();
         PSO pso = new PSO(globalScale, localScale, randomScale);
-
-        reset();
-        soldier = true;
         setPSO(pso);
-        double[][][] idealWeights = pso.getInitialPopulation(200, 10);
-        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
-        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
-        currentScore = newScore;
+        double[][][] idealWeights = pso.getInitialPopulation(1, 10);
 
-        reset();
-        scout = true;
-        setPSO(pso);
-        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
-        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
-        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
-        currentScore = newScore;
-
-        reset();
-        archon = true;
-        setPSO(pso);
-        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
-        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
-        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
-        currentScore = newScore;
-
-        reset();
-        guard = true;
-        setPSO(pso);
-        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
-        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
-        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
-        currentScore = newScore;
-
-        reset();
-        viper = true;
-        setPSO(pso);
-        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
-        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
-        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
-        currentScore = newScore;
-
-        reset();
-        ttm = true;
-        setPSO(pso);
-        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
-        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
-        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
-        currentScore = newScore;
-
-        reset();
-        soldier = true;
-        guard = true;
-        setPSO(pso);
-        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
-        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
-        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
-        currentScore = newScore;
-
-        reset();
-        soldier = true;
-        viper = true;
-        setPSO(pso);
-        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
-        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
-        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
-        currentScore = newScore;
-
-        reset();
-        guard = true;
-        turret = true;
-        setPSO(pso);
-        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
-        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
-        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
-        currentScore = newScore;
-
-        reset();
-        soldier = true;
-        guard = true;
-        archon = true;
-        viper = true;
-        scout = true;
-        ttm = true;
-        turret = true;
-        setPSO(pso);
-        idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
-        newScore = getScores(idealWeights[0], gaWeights, 0, 1)[0];
-        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
-        currentScore = newScore;
+        // this loop runs over all map training sessions
+        for (int i = 0; i < unitCombos.length; i++)
+        {
+            unitStartTime = System.currentTimeMillis();
+            setUnits(unitCombos[i]);
+            currentScore = getResultsForCurrentMaps(idealWeights[0], gaWeights, 0, 1)[0];
+            setPSO(pso);
+            idealWeights = pso.getBestFromStartingPop(idealWeights, 200, 10);
+            newScore = getResultsForCurrentMaps(idealWeights[0], gaWeights, 0, 1)[0];
+            System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+            System.out.println("Round " + i + " of training took:");
+            unitEndTime = System.currentTimeMillis();
+            printTime(unitStartTime, unitEndTime);
+        }
 
         double[][] bestWeights = getBestWeights(idealWeights);
         newScore = getScores(bestWeights, gaWeights, 0, 1)[0];
-        System.out.println("Current Score: " + currentScore + " New Score: " + newScore);
+        System.out.println("Start Score: " + startScore + " End Score: " + newScore);
 
         System.out.println("PSO Weights:");
 
@@ -172,7 +151,19 @@ public class Main
 
         runFightSimulation(bestWeights, bestWeights, 0, 0, true, 0);
 
-        System.out.println("Run Time: " + ((System.currentTimeMillis() - startTime) / 1000));
+        System.out.println("Training is complete");
+        printTime(startTime, System.currentTimeMillis());
+    }
+
+    public static void printTime(long startTime, long stopTime)
+    {
+        long diff = stopTime - startTime;
+        diff /= 1000;
+        long hours = diff / (60 * 60);
+        long minutes = (diff % (60 * 60)) / 60;
+        long seconds = diff % 60;
+
+        System.out.println("Running Time was " + hours + " hours, " + minutes + " minutes and " + seconds + " seconds");
     }
 
     /**
@@ -229,82 +220,59 @@ public class Main
         double[][][] currentResults = new double[80][2][7];
         int index = 0;
 
+        for (int j = 0; j < unitCombos.length; j++)
+        {
+            setUnits(unitCombos[j]);
+
+            for (int i = 0; i < 4; i++)
+            {
+                currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
+                index++;
+                currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
+                index++;
+            }
+        }
+
+        for (int i = 0; i < currentResults.length; i++)
+        {
+            if (i % 2 == 0)
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    results[0] += currentResults[i][0][j];
+                    results[1] += currentResults[i][1][j];
+                }
+            }
+            else
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    results[0] += currentResults[i][1][j];
+                    results[1] += currentResults[i][0][j];
+                }
+            }
+        }
+
+        return results;
+    }
+
+    /**
+     * This method gets the results for running on just the current set maps
+     *
+     * @param weights1
+     * @param weights2
+     * @param teamA
+     * @param teamB
+     * @return
+     */
+    public static double[] getResultsForCurrentMaps(double[][] weights1, double[][] weights2, int teamA, int teamB)
+    {
+        double[] results = new double[2];
+        double[][][] currentResults = new double[80][2][7];
+        int index = 0;
+
         for (int i = 0; i < 4; i++)
         {
-            reset();
-            soldier = true;
-            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
-            index++;
-            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
-            index++;
-
-            reset();
-            scout = true;
-            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
-            index++;
-            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
-            index++;
-
-            reset();
-            archon = true;
-            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
-            index++;
-            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
-            index++;
-
-            reset();
-            guard = true;
-            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
-            index++;
-            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
-            index++;
-
-            reset();
-            viper = true;
-            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
-            index++;
-            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
-            index++;
-
-            reset();
-            ttm = true;
-            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
-            index++;
-            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
-            index++;
-
-            reset();
-            soldier = true;
-            guard = true;
-            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
-            index++;
-            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
-            index++;
-
-            reset();
-            soldier = true;
-            viper = true;
-            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
-            index++;
-            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
-            index++;
-
-            reset();
-            guard = true;
-            turret = true;
-            currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
-            index++;
-            currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
-            index++;
-
-            reset();
-            soldier = true;
-            guard = true;
-            archon = true;
-            viper = true;
-            scout = true;
-            ttm = true;
-            turret = true;
             currentResults[index] = runFightSimulation(weights1, weights2, teamA, teamB, false, i);
             index++;
             currentResults[index] = runFightSimulation(weights2, weights1, teamB, teamA, false, i);
@@ -362,6 +330,17 @@ public class Main
         turret = false;
         ttm = false;
         scout = false;
+    }
+
+    public static void setUnits(boolean[] units)
+    {
+        soldier = units[soldierIndex];
+        archon = units[archonIndex];
+        viper = units[viperIndex];
+        guard = units[guardIndex];
+        turret = units[turretIndex];
+        ttm = units[ttmIndex];
+        scout = units[scoutIndex];
     }
 
     /**

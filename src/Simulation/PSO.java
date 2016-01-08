@@ -49,22 +49,34 @@ public class PSO
                         {
                             for (int l = 0; l < currentWeights[k][j].length; l++)
                             {
-                                localBestWeights[k][j][l] = currentWeights[k][j][l];
+                                if (i == 0)
+                                    localBestWeights[k][j][l] = currentWeights[k][j][l];
+                                else
+                                    currentWeights[k][j][l] = localBestWeights[k][j][l];
                             }
 
-                            localBestScores[k][j] = 0;
-                            globalBestScore[j] = 0;
+                            if (i == 0)
+                            {
+                                localBestScores[k][j] = 0;
+                                globalBestScore[j] = 0;
+                            }
                         }
                     }
                 }
 
-                globalBest = currentWeights[0];
+                if (i == 0)
+                {
+                    globalBest = currentWeights[0];
+                }
             }
 
-            // first update all of the particles
-            for (int j = 0; j < popSize; j++)
+            if (i % 50 != 0)
             {
-                currentWeights[j] = updateParticle(currentWeights[j], localBestWeights[j], globalBest);
+                // first update all of the particles
+                for (int j = 0; j < popSize; j++)
+                {
+                    currentWeights[j] = updateParticle(currentWeights[j], localBestWeights[j], globalBest);
+                }
             }
 
             // update all of the scores for global and local best
@@ -224,5 +236,4 @@ public class PSO
     {
         this.runTurret = runTurret;
     }
-
 }
