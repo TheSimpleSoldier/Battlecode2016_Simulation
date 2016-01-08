@@ -66,24 +66,24 @@
     </initialParts>
     <zombieSpawnSchedule/>
     <initialRobots>
-      <initial-robot originOffsetX="2" originOffsetY="16" type="TURRET" team="B"/>
+      <initial-robot originOffsetX="2" originOffsetY="16" type="TTM" team="B"/>
       <initial-robot originOffsetX="5" originOffsetY="17" type="GUARD" team="B"/>
       <initial-robot originOffsetX="7" originOffsetY="19" type="RANGEDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="7" originOffsetY="24" type="RANGEDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="10" originOffsetY="27" type="GUARD" team="B"/>
-      <initial-robot originOffsetX="11" originOffsetY="19" type="TURRET" team="B"/>
+      <initial-robot originOffsetX="11" originOffsetY="19" type="TTM" team="B"/>
       <initial-robot originOffsetX="11" originOffsetY="21" type="GUARD" team="B"/>
-      <initial-robot originOffsetX="12" originOffsetY="2" type="TURRET" team="A"/>
+      <initial-robot originOffsetX="12" originOffsetY="2" type="TTM" team="A"/>
       <initial-robot originOffsetX="14" originOffsetY="23" type="RANGEDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="15" originOffsetY="6" type="RANGEDZOMBIE" team="ZOMBIE"/>
-      <initial-robot originOffsetX="17" originOffsetY="27" type="TURRET" team="B"/>
+      <initial-robot originOffsetX="17" originOffsetY="27" type="TTM" team="B"/>
       <initial-robot originOffsetX="18" originOffsetY="8" type="GUARD" team="A"/>
-      <initial-robot originOffsetX="18" originOffsetY="10" type="TURRET" team="A"/>
+      <initial-robot originOffsetX="18" originOffsetY="10" type="TTM" team="A"/>
       <initial-robot originOffsetX="19" originOffsetY="2" type="GUARD" team="A"/>
       <initial-robot originOffsetX="22" originOffsetY="5" type="RANGEDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="22" originOffsetY="10" type="RANGEDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="24" originOffsetY="12" type="GUARD" team="A"/>
-      <initial-robot originOffsetX="27" originOffsetY="13" type="TURRET" team="A"/>
+      <initial-robot originOffsetX="27" originOffsetY="13" type="TTM" team="A"/>
     </initialRobots>
   </game-map>
 </object-stream>

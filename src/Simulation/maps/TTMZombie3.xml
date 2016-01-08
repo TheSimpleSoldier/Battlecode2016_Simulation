@@ -66,14 +66,14 @@
     </initialParts>
     <zombieSpawnSchedule/>
     <initialRobots>
-      <initial-robot originOffsetX="3" originOffsetY="22" type="TURRET" team="B"/>
+      <initial-robot originOffsetX="3" originOffsetY="22" type="TTM" team="B"/>
       <initial-robot originOffsetX="3" originOffsetY="27" type="STANDARDZOMBIE" team="ZOMBIE"/>
-      <initial-robot originOffsetX="6" originOffsetY="23" type="TURRET" team="B"/>
-      <initial-robot originOffsetX="8" originOffsetY="24" type="TURRET" team="B"/>
-      <initial-robot originOffsetX="9" originOffsetY="26" type="TURRET" team="B"/>
-      <initial-robot originOffsetX="20" originOffsetY="3" type="TURRET" team="A"/>
-      <initial-robot originOffsetX="21" originOffsetY="5" type="TURRET" team="A"/>
-      <initial-robot originOffsetX="23" originOffsetY="6" type="TURRET" team="A"/>
+      <initial-robot originOffsetX="6" originOffsetY="23" type="TTM" team="B"/>
+      <initial-robot originOffsetX="8" originOffsetY="24" type="TTM" team="B"/>
+      <initial-robot originOffsetX="9" originOffsetY="26" type="TTM" team="B"/>
+      <initial-robot originOffsetX="20" originOffsetY="3" type="TTM" team="A"/>
+      <initial-robot originOffsetX="21" originOffsetY="5" type="TTM" team="A"/>
+      <initial-robot originOffsetX="23" originOffsetY="6" type="TTM" team="A"/>
       <initial-robot originOffsetX="26" originOffsetY="2" type="STANDARDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="26" originOffsetY="7" type="TURRET" team="A"/>
     </initialRobots>

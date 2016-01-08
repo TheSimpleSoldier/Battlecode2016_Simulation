@@ -71,7 +71,7 @@
       <initial-robot originOffsetX="2" originOffsetY="17" type="SOLDIER" team="B"/>
       <initial-robot originOffsetX="3" originOffsetY="14" type="STANDARDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="3" originOffsetY="16" type="STANDARDZOMBIE" team="ZOMBIE"/>
-      <initial-robot originOffsetX="3" originOffsetY="18" type="TURRET" team="B"/>
+      <initial-robot originOffsetX="3" originOffsetY="18" type="TTM" team="B"/>
       <initial-robot originOffsetX="4" originOffsetY="13" type="STANDARDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="5" originOffsetY="15" type="STANDARDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="5" originOffsetY="17" type="SOLDIER" team="B"/>
@@ -84,7 +84,7 @@
       <initial-robot originOffsetX="24" originOffsetY="12" type="SOLDIER" team="A"/>
       <initial-robot originOffsetX="24" originOffsetY="14" type="STANDARDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="25" originOffsetY="16" type="STANDARDZOMBIE" team="ZOMBIE"/>
-      <initial-robot originOffsetX="26" originOffsetY="11" type="TURRET" team="A"/>
+      <initial-robot originOffsetX="26" originOffsetY="11" type="TTM" team="A"/>
       <initial-robot originOffsetX="26" originOffsetY="13" type="STANDARDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="26" originOffsetY="15" type="STANDARDZOMBIE" team="ZOMBIE"/>
       <initial-robot originOffsetX="27" originOffsetY="12" type="SOLDIER" team="A"/>

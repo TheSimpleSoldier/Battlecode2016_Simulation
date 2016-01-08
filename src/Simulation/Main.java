@@ -129,12 +129,23 @@ public class Main
             System.out.println("Round " + i + " of training took:");
             unitEndTime = System.currentTimeMillis();
             printTime(unitStartTime, unitEndTime);
+
+            printCurrentWeights(idealWeights[0]);
         }
 
         double[][] bestWeights = getBestWeights(idealWeights);
         newScore = getScores(bestWeights, gaWeights, 0, 1)[0];
         System.out.println("Start Score: " + startScore + " End Score: " + newScore);
 
+        System.out.println("The best weights so far");
+        printCurrentWeights(bestWeights);
+
+        System.out.println("Training is complete");
+        printTime(startTime, System.currentTimeMillis());
+    }
+
+    public static void printCurrentWeights(double[][] bestWeights)
+    {
         System.out.println("PSO Weights:");
 
         for (int i = 0; i < bestWeights.length; i++)
@@ -145,11 +156,6 @@ public class Main
             }
             System.out.println();
         }
-
-        runFightSimulation(bestWeights, bestWeights, 0, 0, true, 0);
-
-        System.out.println("Training is complete");
-        printTime(startTime, System.currentTimeMillis());
     }
 
     public static void printTime(long startTime, long stopTime)
