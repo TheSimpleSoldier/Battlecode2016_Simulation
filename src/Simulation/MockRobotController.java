@@ -376,6 +376,16 @@ public class MockRobotController implements RobotController
     }
 
     /**
+     * Returns the number of robots on your team, including your archons.
+     *
+     * @return
+     */
+    public int getRobotCount()
+    {
+        throw new Error("getRobotCount not implemented");
+    }
+
+    /**
      * Returns whether you have the ore and the dependencies to build the given robot, and that the robot can build structures.
      *
      * @param type
@@ -406,6 +416,26 @@ public class MockRobotController implements RobotController
         if (this.zombieInfection > 0 || this.viperInfection > 0)
             return true;
         return false;
+    }
+
+    /**
+     * Returns the number of basic signals this robot has sent so far this turn.
+     *
+     * @return
+     */
+    public int getBasicSignalCount()
+    {
+        throw new Error("getBasicSignalCount not implemented");
+    }
+
+    /**
+     * Returns the number of message signals this robot has sent so far this turn.
+     *
+     * @return
+     */
+    public int getMessageSignalCount()
+    {
+        throw new Error("getMessageSignalCount is not implemented");
     }
 
     /**

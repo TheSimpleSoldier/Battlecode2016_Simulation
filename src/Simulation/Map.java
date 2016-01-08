@@ -47,6 +47,10 @@ public class Map
     private double blueSoldierInfectedAmount;
     private double blueGaurdInfectedAmount;
     private double blueViperInfectedAmount;
+
+    private double redViperInfectionDamage;
+    private double blueViperInfectionDamage;
+
     private int redRepairAmount;
     private int blueRepairAmount;
 
@@ -86,6 +90,9 @@ public class Map
         this.blueSoldierInfectedAmount = 0;
         this.blueGaurdInfectedAmount = 0;
         this.blueViperInfectedAmount = 0;
+
+        this.redViperInfectionDamage = 0;
+        this.blueViperInfectionDamage = 0;
 
         this.redRepairAmount = 0;
         this.blueRepairAmount = 0;
@@ -854,7 +861,12 @@ public class Map
         {
             if (attacker.getRc().getType() == RobotType.VIPER)
             {
-                ((MockRobotController) player.getRc()).infectedByViper(10);
+                if (attacker.getRc().getTeam() == Team.A)
+                    this.redViperInfectionDamage += (20 - player.getRc().getViperInfectedTurns()) * 2;
+                else
+                    this.blueViperInfectionDamage += (20 - player.getRc().getViperInfectedTurns()) * 2;
+
+                ((MockRobotController) player.getRc()).infectedByViper(20);
             }
             else if (attacker.getRc().getTeam() == Team.ZOMBIE)
             {
@@ -1100,6 +1112,16 @@ public class Map
         return new double[] {
                 this.blueSoldierInfectedAmount, this.blueGaurdInfectedAmount, this.blueViperInfectedAmount
         };
+    }
+
+    public double getRedViperInfectionDamage()
+    {
+        return this.redViperInfectionDamage;
+    }
+
+    public double getBlueViperInfectionDamage()
+    {
+        return this.blueViperInfectionDamage;
     }
 
     public double getRedRepairAmount()

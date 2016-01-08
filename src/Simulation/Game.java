@@ -101,6 +101,8 @@ public class Game
         double[] blueInfectedAmount = map.getBlueInfectedAmount();
         double redRepairAmount = map.getRedRepairAmount();
         double blueRepairAmount = map.getBlueRepairAmount();
+        double redViperInfectionDamage = map.getRedViperInfectionDamage();
+        double blueViperInfectionDamage = map.getBlueViperInfectionDamage();
 
         // 0 -> Soldier
         // 1 -> Archon
@@ -117,7 +119,7 @@ public class Game
             results[3] = redTotalHealth[4];
             results[4] = 3 * redDamageDealt[2] + redTotalHealth[2];
             results[5] = redTotalHealth[6];
-            results[6] = 2 * redDamageDealt[3] + redTotalHealth[3] - 2 * redInfectedAmount[2];
+            results[6] = 2 * redDamageDealt[3] + 2 * redViperInfectionDamage + redTotalHealth[3] - 2 * redInfectedAmount[2];
         }
         else
         {
@@ -127,7 +129,7 @@ public class Game
             results[3] = blueTotalHealth[4];
             results[4] = 3 * blueDamageDealt[2] + blueTotalHealth[2];
             results[5] = redTotalHealth[6];
-            results[6] = 2 * blueDamageDealt[3] + blueTotalHealth[3] - 2 * blueInfectedAmount[2];
+            results[6] = 2 * blueDamageDealt[3] + 2 * blueViperInfectionDamage + blueTotalHealth[3] - 2 * blueInfectedAmount[2];
         }
 
         return results;
