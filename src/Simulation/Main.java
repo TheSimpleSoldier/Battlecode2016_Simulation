@@ -4,7 +4,7 @@ import java.io.*;
 
 public class Main
 {
-    static boolean zombie = false;
+    static boolean zombie = true;
     static boolean soldier = false;
     static boolean archon = false;
     static boolean viper = false;
@@ -382,7 +382,83 @@ public class Main
 
         if (zombie)
         {
-            if (soldier)
+            if (soldier && ttm && turret && viper && scout && archon && guard)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/AllZombie1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/AllZombie2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/AllZombie3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/AllZombie4.xml";
+                }
+            }
+            else if (soldier && guard)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGuardZombie1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGuardZombie2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGuardZombie3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierGuardZombie4.xml";
+                }
+            }
+            else if (soldier && viper)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierViperZombie1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierViperZombie2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierViperZombie3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierViperZombie4.xml";
+                }
+            }
+            else if (guard && turret)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTurretZombie1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTurretZombie2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTurretZombie3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardTurretZombie4.xml";
+                }
+            }
+            else if (soldier)
             {
                 if (round % 4 == 0)
                 {
@@ -399,6 +475,101 @@ public class Main
                 else if (round % 4 == 3)
                 {
                     map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/SoldierZombie4.xml";
+                }
+            }
+            else if (archon)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ArchonZombie1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ArchonZombie2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ArchonZombie3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ArchonZombie4.xml";
+                }
+            }
+            else if (ttm)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/TTMZombie1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/TTMZombie2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/TTMZombie3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/TTMZombie4.xml";
+                }
+            }
+            else if (scout)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ScoutZombie1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ScoutZombie2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ScoutZombie3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ScoutZombie4.xml";
+                }
+            }
+            else if (viper)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ViperZombie1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ViperZombie2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ViperZombie3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/ViperZombie4.xml";
+                }
+            }
+            else if (guard)
+            {
+                if (round % 4 == 0)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardZombie1.xml";
+                }
+                else if (round % 4 == 1)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardZombie2.xml";
+                }
+                else if (round % 4 == 2)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardZombie3.xml";
+                }
+                else if (round % 4 == 3)
+                {
+                    map = "/Users/fred/Desktop/battlecode-scaffold-master/Battlecode2016_Simulation/src/Simulation/maps/GuardZombie4.xml";
                 }
             }
         }

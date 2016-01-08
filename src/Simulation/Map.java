@@ -859,24 +859,31 @@ public class Map
 
         if (player != null && attacker != null)
         {
-            if (attacker.getRc().getType() == RobotType.VIPER)
-            {
-                if (attacker.getRc().getTeam() == Team.A)
-                    this.redViperInfectionDamage += (20 - player.getRc().getViperInfectedTurns()) * 2;
-                else
-                    this.blueViperInfectionDamage += (20 - player.getRc().getViperInfectedTurns()) * 2;
+            MockRobotController playerRC = (MockRobotController) player.getRc();
+            MockRobotController attackerRC = (MockRobotController) attacker.getRc();
+            Team playerTeam = playerRC.getTeam();
+            Team attackerTeam = attackerRC.getTeam();
+            RobotType attackerType = attackerRC.getType();
+            RobotType playerType = playerRC.getType();
 
-                ((MockRobotController) player.getRc()).infectedByViper(20);
-            }
-            else if (attacker.getRc().getTeam() == Team.ZOMBIE)
+            if (attackerType == RobotType.VIPER)
             {
-                ((MockRobotController) player.getRc()).infectedByZombie(10);
+                if (attackerTeam == Team.A)
+                    this.redViperInfectionDamage += (20 - playerRC.getViperInfectedTurns()) * 2;
+                else
+                    this.blueViperInfectionDamage += (20 - playerRC.getViperInfectedTurns()) * 2;
+
+                playerRC.infectedByViper(20);
+            }
+            else if (attackerTeam == Team.ZOMBIE)
+            {
+                playerRC.infectedByZombie(10);
             }
 
             player.takeDamage(attackAmount);
             double damageAmount = attackAmount;
 
-            if (player.getRc().getTeam() == Team.ZOMBIE && attacker.getRc().getType() == RobotType.GUARD)
+            if (playerTeam == Team.ZOMBIE && attackerType == RobotType.GUARD)
             {
                 player.takeDamage(attackAmount);
                 damageAmount *= 2;
@@ -886,189 +893,168 @@ public class Map
             {
                 damageAmount += player.getHealth();
                 mapLayout[loc.x][loc.y].removeRobotPlayer();
-                if (player.getRc().getTeam() != Team.ZOMBIE && player.getRc().isInfected())
+                if (playerTeam != Team.ZOMBIE && playerRC.isInfected())
                 {
-                    MockRobotController mockRobotController = new MockRobotController(Team.ZOMBIE, player.getRc().getType().turnsInto, loc, this);
+                    MockRobotController mockRobotController = new MockRobotController(Team.ZOMBIE, playerType.turnsInto, loc, this);
                     MockRobotPlayer zombie = new Zombie(mockRobotController, weights1);
                     this.totalZombieHealth += mockRobotController.getHealth();
                     mapLayout[loc.x][loc.y].setRobotPlayer(zombie);
 
-                    if (player.getRc().getTeam() == Team.A)
+                    if (playerTeam == Team.A)
                     {
-                        if (player.getRc().getType() == RobotType.SOLDIER)
+                        if (playerType == RobotType.SOLDIER)
                             this.redSoldierInfectedAmount += mockRobotController.getHealth();
-                        else if (player.getRc().getType() == RobotType.GUARD)
+                        else if (playerType == RobotType.GUARD)
                             this.redGaurdInfectedAmount += mockRobotController.getHealth();
-                        else if (player.getRc().getType() == RobotType.VIPER)
+                        else if (playerType == RobotType.VIPER)
                             this.redViperInfectedAmount += mockRobotController.getHealth();
                     }
                     else
                     {
-                        if (player.getRc().getType() == RobotType.SOLDIER)
+                        if (playerType == RobotType.SOLDIER)
                             this.blueSoldierInfectedAmount += mockRobotController.getHealth();
-                        else if (player.getRc().getType() == RobotType.GUARD)
+                        else if (playerType == RobotType.GUARD)
                             this.blueGaurdInfectedAmount += mockRobotController.getHealth();
-                        else if (player.getRc().getType() == RobotType.VIPER)
+                        else if (playerType == RobotType.VIPER)
                             this.blueViperInfectedAmount += mockRobotController.getHealth();
                     }
                 }
             }
 
-            if (verbose)
+            if (playerTeam == Team.A)
             {
-//                System.out.println("Under Attack!!");
-            }
+                switch (playerType)
+                {
+                    case SOLDIER:
+                        this.redSoldierTotalHealth -= damageAmount;
+                        break;
+                    case GUARD:
+                        this.redGaurdTotalHealth -= damageAmount;
+                        break;
+                    case TURRET:
+                        this.redTurretTotalHealth -= damageAmount;
+                        break;
+                    case TTM:
+                        this.redTTMTotalHealth -= damageAmount;
+                        break;
+                    case SCOUT:
+                        this.redScoutTotalHealth -= damageAmount;
+                        break;
+                    case VIPER:
+                        this.redViperTotalHealth -= damageAmount;
+                        break;
+                    case ARCHON:
+                        this.redArchonTotalHealth -= damageAmount;
+                        break;
 
-            if (player.getRc().getTeam() == Team.A)
-            {
-                if (player.getRc().getType() == RobotType.SOLDIER)
-                {
-                    this.redSoldierTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.GUARD)
-                {
-                    this.redGaurdTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.TURRET)
-                {
-                    this.redTurretTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.TTM)
-                {
-                    this.redTTMTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.SCOUT)
-                {
-                    this.redScoutTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.VIPER)
-                {
-                    this.redViperTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.ARCHON)
-                {
-                    this.redArchonTotalHealth -= damageAmount;
                 }
 
-                if (attacker.getRc().getType() == RobotType.SOLDIER)
+                switch (attackerType)
                 {
-                    this.blueSoldierDamageDealt += damageAmount;
-                }
-                else if (attacker.getRc().getType() == RobotType.GUARD)
-                {
-                    this.blueGaurdDamageDealt += damageAmount;
-                }
-                else if (attacker.getRc().getType() == RobotType.TURRET)
-                {
-                    this.blueTurretDamageDealt += damageAmount;
-                }
-                else if (attacker.getRc().getType() == RobotType.VIPER)
-                {
-                    this.blueViperDamageDealt += damageAmount;
-                }
-                else
-                {
-                    this.totalZombieDamage += damageAmount;
+                    case SOLDIER:
+                        this.blueSoldierDamageDealt += damageAmount;
+                        break;
+                    case GUARD:
+                        this.blueGaurdDamageDealt += damageAmount;
+                        break;
+                    case TURRET:
+                        this.blueTurretDamageDealt += damageAmount;
+                        break;
+                    case VIPER:
+                        this.blueViperDamageDealt += damageAmount;
+                        break;
+                    default:
+                        this.totalZombieDamage += damageAmount;
                 }
             }
-            else if (player.getRc().getTeam() == Team.B)
+            else if (playerTeam == Team.B)
             {
-                if (player.getRc().getType() == RobotType.SOLDIER)
+                switch (playerType)
                 {
-                    this.blueSoldierTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.GUARD)
-                {
-                    this.blueGaurdTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.TURRET)
-                {
-                    this.blueTurretTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.TTM)
-                {
-                    this.blueTTMTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.SCOUT)
-                {
-                    this.blueScoutTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.VIPER)
-                {
-                    this.blueViperTotalHealth -= damageAmount;
-                }
-                else if (player.getRc().getType() == RobotType.ARCHON)
-                {
-                    this.blueArchonTotalHealth -= damageAmount;
+                    case SOLDIER:
+                        this.blueSoldierTotalHealth -= damageAmount;
+                        break;
+                    case GUARD:
+                        this.blueGaurdTotalHealth -= damageAmount;
+                        break;
+                    case TURRET:
+                        this.blueTurretTotalHealth -= damageAmount;
+                        break;
+                    case TTM:
+                        this.blueTTMTotalHealth -= damageAmount;
+                        break;
+                    case SCOUT:
+                        this.blueScoutTotalHealth -= damageAmount;
+                        break;
+                    case VIPER:
+                        this.blueViperTotalHealth -= damageAmount;
+                        break;
+                    case ARCHON:
+                        this.blueArchonTotalHealth -= damageAmount;
+                        break;
+
                 }
 
-                if (attacker.getRc().getType() == RobotType.SOLDIER)
+                switch (attackerType)
                 {
-                    this.redSoldierDamageDealt += damageAmount;
-                }
-                else if (attacker.getRc().getType() == RobotType.GUARD)
-                {
-                    this.redGaurdDamageDealt += damageAmount;
-                }
-                else if (attacker.getRc().getType() == RobotType.TURRET)
-                {
-                    this.redTurretDamageDealt += damageAmount;
-                }
-                else if (attacker.getRc().getType() == RobotType.VIPER)
-                {
-                    this.redViperDamageDealt += damageAmount;
-                }
-                else
-                {
-                    this.totalZombieDamage += damageAmount;
+                    case SOLDIER:
+                        this.redSoldierDamageDealt += damageAmount;
+                        break;
+                    case GUARD:
+                        this.redGaurdDamageDealt += damageAmount;
+                        break;
+                    case TURRET:
+                        this.redTurretDamageDealt += damageAmount;
+                        break;
+                    case VIPER:
+                        this.redViperDamageDealt += damageAmount;
+                        break;
+                    default:
+                        this.totalZombieDamage += damageAmount;
                 }
             }
-            else if (player.getRc().getTeam() == Team.ZOMBIE)
+            else if (playerTeam == Team.ZOMBIE)
             {
                 this.totalZombieHealth -= damageAmount;
-                if (attacker.getRc().getTeam() == Team.A)
+                if (attackerTeam == Team.A)
                 {
-                    if (attacker.getRc().getType() == RobotType.SOLDIER)
+                    switch (attackerType)
                     {
-                        this.redSoldierDamageDealt += damageAmount;
-                    }
-                    else if (attacker.getRc().getType() == RobotType.GUARD)
-                    {
-                        this.redGaurdDamageDealt += damageAmount;
-                    }
-                    else if (attacker.getRc().getType() == RobotType.TURRET)
-                    {
-                        this.redTurretDamageDealt += damageAmount;
-                    }
-                    else if (attacker.getRc().getType() == RobotType.VIPER)
-                    {
-                        this.redViperDamageDealt += damageAmount;
+                        case SOLDIER:
+                            this.redSoldierDamageDealt += damageAmount;
+                            break;
+                        case GUARD:
+                            this.redGaurdDamageDealt += damageAmount;
+                            break;
+                        case TURRET:
+                            this.redTurretDamageDealt += damageAmount;
+                            break;
+                        case VIPER:
+                            this.redViperDamageDealt += damageAmount;
+                            break;
                     }
                 }
-                else if (attacker.getRc().getTeam() == Team.B)
+                else if (attackerTeam == Team.B)
                 {
-                    if (attacker.getRc().getType() == RobotType.SOLDIER)
+                    switch (attackerType)
                     {
-                        this.blueSoldierDamageDealt += damageAmount;
-                    }
-                    else if (attacker.getRc().getType() == RobotType.GUARD)
-                    {
-                        this.blueGaurdDamageDealt += damageAmount;
-                    }
-                    else if (attacker.getRc().getType() == RobotType.TURRET)
-                    {
-                        this.blueTurretDamageDealt += damageAmount;
-                    }
-                    else if (attacker.getRc().getType() == RobotType.VIPER)
-                    {
-                        this.blueViperDamageDealt += damageAmount;
+                        case SOLDIER:
+                            this.blueSoldierDamageDealt += damageAmount;
+                            break;
+                        case GUARD:
+                            this.blueGaurdDamageDealt += damageAmount;
+                            break;
+                        case TURRET:
+                            this.blueTurretDamageDealt += damageAmount;
+                            break;
+                        case VIPER:
+                            this.blueViperDamageDealt += damageAmount;
+                            break;
+                        default:
+                            this.totalZombieDamage += damageAmount;
                     }
                 }
             }
-        }
-        else
-        {
-//            System.out.println("Attacker: " + attacker + " Player: " + player);
         }
     }
 

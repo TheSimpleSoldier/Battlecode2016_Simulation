@@ -28,6 +28,11 @@ public abstract class Unit extends MockRobotPlayer
 
     public void run()
     {
+        if (!rc.isCoreReady() && !rc.isWeaponReady())
+        {
+            return;
+        }
+
         nearByEnemies = rc.senseNearbyRobots(rc.getType().attackRadiusSquared, rc.getTeam().opponent());
         enemies = rc.senseNearbyRobots(rc.getType().sensorRadiusSquared, rc.getTeam().opponent());
 
