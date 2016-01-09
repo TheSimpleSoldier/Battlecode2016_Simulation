@@ -46,24 +46,20 @@ public class PSO
                 // reset global and local best for new map
                 for (int k = 0; k < popSize; k++)
                 {
-                    if (i == 0 && runSoldier || i == 1 && runArchon || i == 2 && runGuard || i == 3 && runScout
-                            || i == 4 && runTurret || i == 5 && runTTM || i == 6 && runViper)
+                    for (int j = 0; j < 7; j++)
                     {
-                        for (int j = 0; j < 7; j++)
+                        for (int l = 0; l < currentWeights[k][j].length; l++)
                         {
-                            for (int l = 0; l < currentWeights[k][j].length; l++)
-                            {
-                                if (i == 0)
-                                    localBestWeights[k][j][l] = currentWeights[k][j][l];
-                                else
-                                    currentWeights[k][j][l] = localBestWeights[k][j][l];
-                            }
-
                             if (i == 0)
-                            {
-                                localBestScores[k][j] = 0;
-                                globalBestScore[j] = 0;
-                            }
+                                localBestWeights[k][j][l] = currentWeights[k][j][l];
+                            else
+                                currentWeights[k][j][l] = localBestWeights[k][j][l];
+                        }
+
+                        if (i == 0)
+                        {
+                            localBestScores[k][j] = 0;
+                            globalBestScore[j] = 0;
                         }
                     }
                 }
@@ -93,15 +89,17 @@ public class PSO
                     {
                         double[][] results = Main.runFightSimulation(currentWeights[j], currentWeights[k], 0, 0, false, map);
 
-                        if (i == 0 && runSoldier || i == 1 && runArchon || i == 2 && runGuard || i == 3 && runScout
-                                || i == 4 && runTurret || i == 5 && runTTM || i == 6 && runViper)
-                        {
+
                             for (int l = 0; l < 7; l++)
                             {
-                                currentFitness[j][l] += results[0][l];
-                                currentFitness[k][l] += results[1][l];
+                                if (l == 0 && runSoldier || l == 1 && runArchon || l == 2 && runGuard || l == 3 && runScout
+                                        || l == 4 && runTurret || l == 5 && runTTM || l == 6 && runViper)
+                                {
+                                    currentFitness[j][l] += results[0][l];
+                                    currentFitness[k][l] += results[1][l];
+                                }
                             }
-                        }
+
                     }
                 }
             }
@@ -111,8 +109,8 @@ public class PSO
             {
                 for (int k = 0; k < 7; k++)
                 {
-                    if ((i == 0 && runSoldier) || (i == 1 && runArchon) || (i == 2 && runGuard) || (i == 3 && runScout)
-                            || (i == 4 && runTurret) || (i == 5 && runTTM) || (i == 6 && runViper))
+                    if ((k == 0 && runSoldier) || (k == 1 && runArchon) || (k == 2 && runGuard) || (k == 3 && runScout)
+                            || (k == 4 && runTurret) || (k == 5 && runTTM) || (k == 6 && runViper))
                     {
                         if (currentFitness[j][k] > localBestScores[j][k])
                         {
