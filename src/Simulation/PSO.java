@@ -31,6 +31,10 @@ public class PSO
         double[][] localBestScores = new double[popSize][7];
         double[] globalBestScore = new double[7];
         double[][] currentFitness = new double[popSize][7];
+        double[][][] originalWeights = new double[popSize][7][currentWeights[0][0].length];
+
+
+
         int map = -1;
 
         for (int i = 0; i < rounds; i++)
@@ -126,6 +130,24 @@ public class PSO
 //            System.out.println("Finished round " + i + " of PSO");
         }
 
+//        for (int i = 0; i < localBestWeights.length; i++)
+//        {
+//            if (!runSoldier)
+//                localBestWeights[i][0] = currentWeights[i][0];
+//            if (!runArchon)
+//                localBestWeights[i][1] = currentWeights[i][1];
+//            if (!runGuard)
+//                localBestWeights[i][2] = currentWeights[i][2];
+//            if (!runScout)
+//                localBestWeights[i][3] = currentWeights[i][3];
+//            if (!runTurret)
+//                localBestWeights[i][4] = currentWeights[i][4];
+//            if (!runTTM)
+//                localBestWeights[i][5] = currentWeights[i][5];
+//            if (!runViper)
+//                localBestWeights[i][6] = currentWeights[i][6];
+//        }
+
         return localBestWeights;
     }
 
@@ -184,7 +206,7 @@ public class PSO
 
     public double[][] updateParticle(double[][] current, double[][] localBest, double[][] globalBest)
     {
-        double[][] newWeights = new double[current.length][current[0].length];
+        double[][] newWeights = current;
 
         for (int i = 0; i < newWeights.length; i++)
         {
