@@ -39,7 +39,7 @@ public class PSO
 
         for (int i = 0; i < rounds; i++)
         {
-            if (i % 50 == 0)
+            if (i % (rounds / 4) == 0)
             {
                 map++;
 
