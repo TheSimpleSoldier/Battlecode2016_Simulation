@@ -193,7 +193,7 @@ public class Map
     }
 
     /**
-     * This method will find the width and height of the map
+     * This method will find the maxX and maxY of the map
      *
      * @return
      */
@@ -209,9 +209,9 @@ public class Map
 
             for (String x = in.readLine(); x != null; x = in.readLine())
             {
-                if (x.contains("height"))
+                if (x.contains("maxY"))
                 {
-                    int index = x.indexOf("height");
+                    int index = x.indexOf("maxY");
                     index += 8;
                     char numb = x.charAt(index);
 
@@ -224,9 +224,9 @@ public class Map
                     }
                 }
 
-                if (x.contains("width"))
+                if (x.contains("maxX"))
                 {
-                    int index = x.indexOf("width");
+                    int index = x.indexOf("maxX");
                     index += 7;
                     char numb = x.charAt(index);
 

@@ -6,6 +6,6 @@ public class Viper extends Unit {
     public Viper(RobotController rc, double[][] weights)
     {
         super(rc, weights);
-        net.setWeights(weights[6]);
+        net.setWeights(weights[2]);
     }
 }

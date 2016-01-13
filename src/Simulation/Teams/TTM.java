@@ -9,4 +9,9 @@ public class TTM extends Unit
         super(rc, weights);
         net.setWeights(weights[5]);
     }
+
+    public void run()
+    {
+        if (rc.isCoreReady()) navigator.move(target);
+    }
 }

@@ -9,4 +9,9 @@ public class Scout extends Unit
         super(rc, weights);
         net.setWeights(weights[3]);
     }
+
+    public void run()
+    {
+        if (rc.isCoreReady()) navigator.move(target);
+    }
 }

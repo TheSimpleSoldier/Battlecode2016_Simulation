@@ -316,19 +316,6 @@ public class FightMicro
 
 
     /**
-     * Creates inputs for network
-     * 2 are for center of mass of enemy
-     * 2 are for center of mass of allies
-     * 1 is for standard deviation of enemy
-     * 1 is for standard deviation of allies
-     * 1 is for number of enemy
-     * 1 is for number of allies
-     * 1 is for core delay
-     * 1 is for weapon delay
-     * 8 are for terrain around bot
-     * 21 for each type of bot and is count of that type of enemy
-     * 21 for each type of bot and is count of that type of ally
-     *
      * each count is divided by 10 to normalize
      *
      * @param nearByBots all near by bots
@@ -423,5 +410,200 @@ public class FightMicro
         toReturn[9] = closeAllies / 10;
 
         return toReturn;
+    }
+
+
+    public boolean runAdvancedFightMicro(RobotInfo[] allies, RobotInfo[] nearByEnemies, RobotInfo[] enemies, Direction direction, FeedForwardNeuralNetwork net) throws GameActionException
+    {
+        if (enemies.length == 0) return false;
+
+        double[] inputs = getAdvancedInputs(allies, nearByEnemies, enemies);
+
+        double[] output = net.compute(new double[]{inputs[0], inputs[1],inputs[2],inputs[3],inputs[4],inputs[5],inputs[6],inputs[7],inputs[8],inputs[9],inputs[10]});
+
+        boolean flee = false;
+        boolean rush = false;
+        boolean retreat = false;
+        boolean cluster = false;
+        boolean pursue = false;
+        boolean advance = false;
+        boolean kite = false;
+
+        if (output[0] > 0.5) flee = true;
+        if (output[1] > 0.5) rush = true;
+        if (output[2] > 0.5) retreat = true;
+        if (output[3] > 0.5) cluster = true;
+        if (output[4] > 0.5) pursue = true;
+        if (output[5] > 0.5) advance = true;
+        if (output[6] > 0.5) kite = true;
+
+        MapLocation allyCOM = new MapLocation((int) inputs[13], (int) inputs[14]);
+        MapLocation enemyCOM = new MapLocation((int) inputs[11], (int) inputs[12]);
+        MapLocation us = rc.getLocation();
+
+        if (flee)
+        {
+            if (rc.isCoreReady()) moveDir(us.directionTo(enemyCOM).opposite());
+        }
+
+        if (rush)
+        {
+            if (rc.isCoreReady()) moveDir(us.directionTo(enemyCOM));
+        }
+
+        if (!rush && !flee)
+        {
+            if (rc.isWeaponReady() && nearByEnemies.length > 0)
+            {
+                RobotInfo weakest = findWeakestEnemy(nearByEnemies);
+
+                if (rc.canAttackLocation(weakest.location))
+                {
+                    rc.attackLocation(weakest.location);
+                }
+            }
+            else
+            {
+                if (!rc.isCoreReady()) return true;
+
+                if (retreat) moveDir(us.directionTo(enemyCOM).opposite());
+                if (cluster && rc.isCoreReady()) moveDir(us.directionTo(allyCOM));
+                if (pursue && rc.isCoreReady()) moveDir(us.directionTo(enemyCOM));
+                if (advance && rc.isCoreReady()) moveDir(direction);
+
+                if (kite)
+                {
+                    Direction dir = rc.getLocation().directionTo(enemyCOM).opposite();
+                    MapLocation forward = us.add(dir);
+                    MapLocation right = us.add(dir.rotateRight());
+                    MapLocation left = us.add(dir.rotateLeft());
+                    int attackRange = rc.getType().attackRadiusSquared;
+
+                    for (int i = nearByEnemies.length; --i>=0;)
+                    {
+                        if (rc.canMove(dir) && nearByEnemies[i].location.distanceSquaredTo(forward) <= attackRange)
+                        {
+                            rc.move(dir);
+                            return true;
+                        }
+                        else if (rc.canMove(dir.rotateRight()) && nearByEnemies[i].location.distanceSquaredTo(right) <= attackRange)
+                        {
+                            rc.move(dir.rotateRight());
+                            return true;
+                        }
+                        else if (rc.canMove(dir.rotateLeft()) && nearByEnemies[i].location.distanceSquaredTo(left) <= attackRange)
+                        {
+                            rc.move(dir.rotateLeft());
+                            return true;
+                        }
+                    }
+                }
+
+                return true;
+            }
+        }
+
+
+
+        return false;
+    }
+
+    private double[] getAdvancedInputs(RobotInfo[] allies, RobotInfo[] nearByEnemies, RobotInfo[] enemies)
+    {
+        double[] inputs = new double[15];
+
+        inputs[0] = rc.getHealth();
+
+        double alliedHealth = 0;
+        double enemyHealth = 0;
+        double offensiveEnemies = 0;
+        double enemiesInRangeOfUs = 0;
+        double alliedAttackPower = 0;
+        double enemyAttackPower = 0;
+        int enemy_x = 0;
+        int enemy_y = 0;
+        int ally_x = 0;
+        int ally_y = 0;
+
+        for (int i = 0; i < enemies.length; i++)
+        {
+            enemy_x += enemies[i].location.x;
+            enemy_y += enemies[i].location.y;
+            switch(enemies[i].type)
+            {
+                case VIPER:
+                case SOLDIER:
+                case GUARD:
+                case BIGZOMBIE:
+                case FASTZOMBIE:
+                case STANDARDZOMBIE:
+                case RANGEDZOMBIE:
+                case TURRET:
+                    enemyAttackPower += enemies[i].attackPower;
+                    offensiveEnemies++;
+                    enemyHealth += enemies[i].health;
+                    if (rc.getLocation().distanceSquaredTo(enemies[i].location) <= enemies[i].type.attackRadiusSquared)
+                        enemiesInRangeOfUs++;
+            }
+        }
+
+        enemy_x /= enemies.length;
+        enemy_y /= enemies.length;
+
+        MapLocation enemyCOM = new MapLocation(enemy_x, enemy_y);
+        int ourDist = rc.getLocation().distanceSquaredTo(enemyCOM);
+        int alliesInFront = 0;
+        int alliesBehind = 0;
+        int offensiveAllies = 0;
+
+        for (int i = allies.length; --i >= 0; )
+        {
+            switch(allies[i].type)
+            {
+                case VIPER:
+                case SOLDIER:
+                case GUARD:
+                case TURRET:
+                    offensiveAllies++;
+                    alliedHealth += allies[i].health;
+                    alliedAttackPower += allies[i].attackPower;
+
+                    if (allies[i].location.distanceSquaredTo(enemyCOM) < ourDist)
+                    {
+                        alliesInFront++;
+                    }
+                    else
+                    {
+                        alliesBehind++;
+                    }
+
+                    break;
+            }
+            ally_x += allies[i].location.x;
+            ally_y += allies[i].location.y;
+        }
+
+        if (allies.length > 0)
+        {
+            ally_x /= allies.length;
+            ally_y /= allies.length;
+        }
+
+        inputs[1] = offensiveEnemies;
+        inputs[2] = nearByEnemies.length;
+        inputs[3] = enemiesInRangeOfUs;
+        inputs[4] = enemyAttackPower;
+        inputs[5] = alliedAttackPower;
+        inputs[6] = enemyHealth;
+        inputs[7] = alliedHealth;
+        inputs[8] = offensiveAllies;
+        inputs[9] = alliesBehind;
+        inputs[10] = alliesInFront;
+        inputs[11] = enemy_x;
+        inputs[12] = enemy_y;
+        inputs[13] = ally_x;
+        inputs[14] = ally_y;
+
+        return inputs;
     }
 }

@@ -646,6 +646,17 @@ public class MockRobotController implements RobotController
     }
 
     /**
+     * Senses nearby MapLocations with nonzero parts within a certain radius.
+     *
+     * @param radiussquared
+     * @return
+     */
+    public MapLocation[] sensePartLocations(int radiussquared)
+    {
+        throw new Error("sensePartLocations not implemented");
+    }
+
+    /**
      * Senses the parts at the given location.
      *
      * @param loc

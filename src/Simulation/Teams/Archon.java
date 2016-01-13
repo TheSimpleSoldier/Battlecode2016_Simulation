@@ -7,12 +7,13 @@ public class Archon extends Unit
     public Archon(RobotController rc, double[][] weights)
     {
         super(rc, weights);
-        net.setWeights(weights[1]);
+//        net.setWeights(weights[1]);
     }
+
 
     public void run()
     {
-        super.run();
+        if (rc.isCoreReady()) navigator.move(target);
 
         if (nearByAllies.length > 0)
         {

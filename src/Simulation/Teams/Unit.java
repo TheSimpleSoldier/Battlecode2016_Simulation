@@ -47,9 +47,13 @@ public abstract class Unit extends MockRobotPlayer
         {
             if (rc.getType() == RobotType.SOLDIER || rc.getType() == RobotType.GUARD  || rc.getType() == RobotType.VIPER)
             {
-                if (this.fightMicro.runFightMicro(enemies, nearByAllies, allies, target, nearByEnemies, net));
-                else if (this.fightMicro.runFightMicro(zombies, nearByAllies, allies, target, nearByZombies, net));
+                if (fightMicro.runAdvancedFightMicro(allies, nearByEnemies, enemies, rc.getLocation().directionTo(target), net));
+                else if (fightMicro.runAdvancedFightMicro(allies, nearByZombies, zombies, rc.getLocation().directionTo(target), net));
                 else if (rc.isCoreReady()) navigator.move(target);
+
+//                if (this.fightMicro.runFightMicro(enemies, nearByAllies, allies, target, nearByEnemies, net));
+//                else if (this.fightMicro.runFightMicro(zombies, nearByAllies, allies, target, nearByZombies, net));
+//                else if (rc.isCoreReady()) navigator.move(target);
             }
             else
             {
