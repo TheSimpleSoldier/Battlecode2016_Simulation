@@ -419,7 +419,7 @@ public class FightMicro
 
         double[] inputs = getAdvancedInputs(allies, nearByEnemies, enemies);
 
-        double[] output = net.compute(new double[]{inputs[0], inputs[1],inputs[2],inputs[3],inputs[4],inputs[5],inputs[6],inputs[7],inputs[8],inputs[9],inputs[10]});
+        double[] output = net.computeAdvanced(new double[]{inputs[0], inputs[1],inputs[2],inputs[3],inputs[4],inputs[5],inputs[6],inputs[7],inputs[8],inputs[9],inputs[10]});
 
         boolean flee = false;
         boolean rush = false;

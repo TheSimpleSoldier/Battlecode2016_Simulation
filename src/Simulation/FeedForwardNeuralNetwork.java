@@ -334,6 +334,100 @@ public class FeedForwardNeuralNetwork
         return output;
     }
 
+    public double[] computeAdvanced(double[] input)
+    {
+        double[] weights = this.weights;
+        double[] middle = {0,0,0,0,0,0,0,0,0,0};
+        double[] output = {0,0,0,0,0,0,0};
+
+        if(input[0] * weights[0] + input[1] * weights[10] + input[2] * weights[20] + input[3] * weights[30] + input[4] * weights[40] + input[5] * weights[50] + input[6] * weights[60] + input[7] * weights[70] + input[8] * weights[80] + input[9] * weights[90] + input[10] * weights[100] > .5)
+        {
+            middle[0] = 1;
+        }
+
+        if(input[0] * weights[1] + input[1] * weights[11] + input[2] * weights[21] + input[3] * weights[31] + input[4] * weights[41] + input[5] * weights[51] + input[6] * weights[61] + input[7] * weights[71] + input[8] * weights[81] + input[9] * weights[91] + input[10] * weights[101] > .5)
+        {
+            middle[1] = 1;
+        }
+
+        if(input[0] * weights[2] + input[1] * weights[12] + input[2] * weights[22] + input[3] * weights[32] + input[4] * weights[42] + input[5] * weights[52] + input[6] * weights[62] + input[7] * weights[72] + input[8] * weights[82] + input[9] * weights[92] + input[10] * weights[102] > .5)
+        {
+            middle[2] = 1;
+        }
+
+        if(input[0] * weights[3] + input[1] * weights[13] + input[2] * weights[23] + input[3] * weights[33] + input[4] * weights[43] + input[5] * weights[53] + input[6] * weights[63] + input[7] * weights[73] + input[8] * weights[83] + input[9] * weights[93] + input[10] * weights[103] > .5)
+        {
+            middle[3] = 1;
+        }
+
+        if(input[0] * weights[4] + input[1] * weights[14] + input[2] * weights[24] + input[3] * weights[34] + input[4] * weights[44] + input[5] * weights[54] + input[6] * weights[64] + input[7] * weights[74] + input[8] * weights[84] + input[9] * weights[94] + input[10] * weights[104] > .5)
+        {
+            middle[4] = 1;
+        }
+
+        if(input[0] * weights[5] + input[1] * weights[15] + input[2] * weights[25] + input[3] * weights[35] + input[4] * weights[45] + input[5] * weights[55] + input[6] * weights[65] + input[7] * weights[75] + input[8] * weights[85] + input[9] * weights[95] + input[10] * weights[105] > .5)
+        {
+            middle[5] = 1;
+        }
+
+        if(input[0] * weights[6] + input[1] * weights[16] + input[2] * weights[26] + input[3] * weights[36] + input[4] * weights[46] + input[5] * weights[56] + input[6] * weights[66] + input[7] * weights[76] + input[8] * weights[86] + input[9] * weights[96] + input[10] * weights[106] > .5)
+        {
+            middle[6] = 1;
+        }
+
+        if(input[0] * weights[7] + input[1] * weights[17] + input[2] * weights[27] + input[3] * weights[37] + input[4] * weights[47] + input[5] * weights[57] + input[6] * weights[67] + input[7] * weights[77] + input[8] * weights[87] + input[9] * weights[97] + input[10] * weights[107] > .5)
+        {
+            middle[7] = 1;
+        }
+
+        if(input[0] * weights[8] + input[1] * weights[18] + input[2] * weights[28] + input[3] * weights[38] + input[4] * weights[48] + input[5] * weights[58] + input[6] * weights[68] + input[7] * weights[78] + input[8] * weights[88] + input[9] * weights[98] + input[10] * weights[108] > .5)
+        {
+            middle[8] = 1;
+        }
+
+        if(input[0] * weights[9] + input[1] * weights[19] + input[2] * weights[29] + input[3] * weights[39] + input[4] * weights[49] + input[5] * weights[59] + input[6] * weights[69] + input[7] * weights[79] + input[8] * weights[89] + input[9] * weights[99] + input[10] * weights[109] > .5)
+        {
+            middle[9] = 1;
+        }
+
+        if(middle[0] * weights[110] + middle[1] * weights[117] + middle[2] * weights[124] + middle[3] * weights[131] + middle[4] * weights[138] + middle[5] * weights[145] + middle[6] * weights[152] + middle[7] * weights[159] + middle[8] * weights[166] + middle[9] * weights[173] > .5)
+        {
+            output[0] = 1;
+        }
+
+        if(middle[0] * weights[111] + middle[1] * weights[118] + middle[2] * weights[125] + middle[3] * weights[132] + middle[4] * weights[139] + middle[5] * weights[146] + middle[6] * weights[153] + middle[7] * weights[160] + middle[8] * weights[167] + middle[9] * weights[174] > .5)
+        {
+            output[1] = 1;
+        }
+
+        if(middle[0] * weights[112] + middle[1] * weights[119] + middle[2] * weights[126] + middle[3] * weights[133] + middle[4] * weights[140] + middle[5] * weights[147] + middle[6] * weights[154] + middle[7] * weights[161] + middle[8] * weights[168] + middle[9] * weights[175] > .5)
+        {
+            output[2] = 1;
+        }
+
+        if(middle[0] * weights[113] + middle[1] * weights[120] + middle[2] * weights[127] + middle[3] * weights[134] + middle[4] * weights[141] + middle[5] * weights[148] + middle[6] * weights[155] + middle[7] * weights[162] + middle[8] * weights[169] + middle[9] * weights[176] > .5)
+        {
+            output[3] = 1;
+        }
+
+        if(middle[0] * weights[114] + middle[1] * weights[121] + middle[2] * weights[128] + middle[3] * weights[135] + middle[4] * weights[142] + middle[5] * weights[149] + middle[6] * weights[156] + middle[7] * weights[163] + middle[8] * weights[170] + middle[9] * weights[177] > .5)
+        {
+            output[4] = 1;
+        }
+
+        if(middle[0] * weights[115] + middle[1] * weights[122] + middle[2] * weights[129] + middle[3] * weights[136] + middle[4] * weights[143] + middle[5] * weights[150] + middle[6] * weights[157] + middle[7] * weights[164] + middle[8] * weights[171] + middle[9] * weights[178] > .5)
+        {
+            output[5] = 1;
+        }
+
+        if(middle[0] * weights[116] + middle[1] * weights[123] + middle[2] * weights[130] + middle[3] * weights[137] + middle[4] * weights[144] + middle[5] * weights[151] + middle[6] * weights[158] + middle[7] * weights[165] + middle[8] * weights[172] + middle[9] * weights[179] > .5)
+        {
+            output[6] = 1;
+        }
+
+        return output;
+    }
+
     /**
      * Gets weight between 2 nodes
      * @param layerStart Starting layer, -1 for bias node
